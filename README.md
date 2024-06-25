@@ -19,8 +19,8 @@ vs 2022
 
 GNU GENERAL PUBLIC LICENSE
 -----------------------------
-
-<img style="float: left;" src="solids4foamLogoName.png">
+[solids4foam](https://github.com/solids4foam/solids4foam)
+<img style="float: left;" src="https://github.com/solids4foam/solids4foam/blob/master/solids4foamLogoName.png">
 
 ---
 
