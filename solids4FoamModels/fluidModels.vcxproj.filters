@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="fluidModels\elasticSlipWallVelocityFvPatchVectorField.C" />
+    <ClCompile Include="fluidModels\elasticWallPressureFvPatchScalarField.C" />
+    <ClCompile Include="fluidModels\elasticWallVelocityFvPatchVectorField.C" />
+    <ClCompile Include="fluidModels\extrapolatedFvPatchFields.C" />
+    <ClCompile Include="fluidModels\extrapolatedPressureFvPatchScalarField.C" />
+    <ClCompile Include="fluidModels\fixedVelocityPressureFvPatchScalarField.C" />
+    <ClCompile Include="fluidModels\fluidModel.C" />
+    <ClCompile Include="fluidModels\interFluid.C" />
+    <ClCompile Include="fluidModels\movingWallPressureFvPatchScalarField.C" />
+    <ClCompile Include="fluidModels\newMovingWallVelocityFvPatchVectorField.C" />
+    <ClCompile Include="fluidModels\normalInletVelocityFvPatchVectorField.C" />
+    <ClCompile Include="fluidModels\oneWayFsiFluid.C" />
+    <ClCompile Include="fluidModels\outflowPressureFvPatchScalarField.C" />
+    <ClCompile Include="fluidModels\paraboloidInletVelocityFvPatchVectorField.C" />
+    <ClCompile Include="fluidModels\pimpleFluid.C" />
+    <ClCompile Include="fluidModels\pimpleOversetFluid.C" />
+    <ClCompile Include="fluidModels\pulsedParabolicVelocityFvPatchVectorField.C" />
+    <ClCompile Include="fluidModels\robinFvPatchFields.C" />
+    <ClCompile Include="fluidModels\skewCorrectedLinearDC.C" />
+    <ClCompile Include="fluidModels\sonicLiquidFluid.C" />
+    <ClCompile Include="fluidModels\timeVaryingVelocityPointPatchVectorField.C" />
+    <ClCompile Include="fluidModels\transitionalParabolicVelocityFvPatchVectorField.C" />
+  </ItemGroup>
+</Project>

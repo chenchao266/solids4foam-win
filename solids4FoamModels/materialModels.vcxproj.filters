@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="materialModels\anisotropicBiotElastic.C" />
+    <ClCompile Include="materialModels\constantThermal.C" />
+    <ClCompile Include="materialModels\dualMechanicalModel.C" />
+    <ClCompile Include="materialModels\GentElastic.C" />
+    <ClCompile Include="materialModels\isotropicFungElastic.C" />
+    <ClCompile Include="materialModels\linearElastic.C" />
+    <ClCompile Include="materialModels\linearElasticCt.C" />
+    <ClCompile Include="materialModels\linearElasticFromFile.C" />
+    <ClCompile Include="materialModels\linearElasticMisesPlastic.C" />
+    <ClCompile Include="materialModels\linearElasticMohrCoulombPlastic.C" />
+    <ClCompile Include="materialModels\mechanicalLaw.C" />
+    <ClCompile Include="materialModels\mechanicalModel.C" />
+    <ClCompile Include="materialModels\MooneyRivlinElastic.C" />
+    <ClCompile Include="materialModels\neoHookeanElastic.C" />
+    <ClCompile Include="materialModels\neoHookeanElasticMisesPlastic.C" />
+    <ClCompile Include="materialModels\newMechanicalLaw.C" />
+    <ClCompile Include="materialModels\OgdenElastic.C" />
+    <ClCompile Include="materialModels\orthotropicLinearElastic.C" />
+    <ClCompile Include="materialModels\poroMechanicalLaw.C" />
+    <ClCompile Include="materialModels\solidSubMeshes.C" />
+    <ClCompile Include="materialModels\StVenantKirchhoffElastic.C" />
+    <ClCompile Include="materialModels\thermalLaw.C" />
+    <ClCompile Include="materialModels\thermalModel.C" />
+    <ClCompile Include="materialModels\thermoMechanicalLaw.C" />
+    <ClCompile Include="materialModels\viscoNeoHookeanElastic.C" />
+    <ClCompile Include="materialModels\viscousHookeanElastic.C" />
+    <ClCompile Include="materialModels\YeohElastic.C" />
+  </ItemGroup>
+</Project>
