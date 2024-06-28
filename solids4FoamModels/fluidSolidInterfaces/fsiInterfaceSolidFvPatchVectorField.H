@@ -82,10 +82,8 @@ public:
 
 
     // Constructors
-#if 0
-    void updateForce();
-#endif
-    //- Construct from patch and internal field
+
+        //- Construct from patch and internal field
         fsiInterfaceSolidFvPatchVectorField
         (
             const fvPatch&,

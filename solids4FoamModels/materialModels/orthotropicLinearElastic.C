@@ -148,9 +148,11 @@ void Foam::orthotropicLinearElastic::makeElasticC() const
 }
 
 
-
+#ifdef FOAMEXTEND
 const Foam::volSymmTensor4thOrderField&
-
+#else
+const Foam::volTensorField&
+#endif
 Foam::orthotropicLinearElastic::elasticC() const
 {
     if (elasticCPtr_.empty())
@@ -267,9 +269,11 @@ void Foam::orthotropicLinearElastic::makeElasticCf() const
 }
 
 
-
+#ifdef FOAMEXTEND
 const Foam::surfaceSymmTensor4thOrderField&
-
+#else
+const Foam::surfaceTensorField&
+#endif
 Foam::orthotropicLinearElastic::elasticCf() const
 {
     if (elasticCfPtr_.empty())
@@ -325,7 +329,7 @@ Foam::orthotropicLinearElastic::orthotropicLinearElastic
         dimensionedVector
         (
 #ifdef FOAMEXTEND
-            dict.lookupOrDefault<vector>("materialDirectionX", vector(1,0,0))
+            mechanicalLaw::dict().lookupOrAddDefault<vector>("materialDirectionX", vector(1,0,0))
 #else
             vector(1,0,0) // Only global directions allowed
 #endif
@@ -349,7 +353,7 @@ Foam::orthotropicLinearElastic::orthotropicLinearElastic
         dimensionedVector
         (
 #ifdef FOAMEXTEND
-            dict.lookupOrDefault<vector>("materialDirectionX", vector(0,1,0))
+            mechanicalLaw::dict().lookupOrAddDefault<vector>("materialDirectionX", vector(0,1,0))
 #else
             vector(0,1,0) // Only global directions allowed
 #endif
@@ -373,7 +377,7 @@ Foam::orthotropicLinearElastic::orthotropicLinearElastic
         dimensionedVector
         (
 #ifdef FOAMEXTEND
-            dict.lookupOrDefault<vector>("materialDirectionX", vector(0,0,1))
+            mechanicalLaw::dict().lookupOrAddDefault<vector>("materialDirectionX", vector(0,0,1))
 #else
             vector(0,0,1) // Only global directions allowed
 #endif
@@ -392,7 +396,7 @@ Foam::orthotropicLinearElastic::orthotropicLinearElastic
             "(\n"
             "    const word& name,\n"
             "    const fvMesh& mesh,\n"
-            "    const dictionary& dict\n"
+            "    dictionary& dict\n"
             ")"
         )   << "Material law not implemented for planeStress!"
             << abort(FatalError);
@@ -415,7 +419,7 @@ Foam::orthotropicLinearElastic::orthotropicLinearElastic
             "(\n"
             "    const word& name,\n"
             "    const fvMesh& mesh,\n"
-            "    const dictionary& dict\n"
+            "    dictionary& dict\n"
             ")"
         )   << "E1, E2, E3, G12, G23, G31 should all be greater than zero!"
             << abort(FatalError);
@@ -435,7 +439,7 @@ Foam::orthotropicLinearElastic::orthotropicLinearElastic
             "(\n"
             "    const word& name,\n"
             "    const fvMesh& mesh,\n"
-            "    const dictionary& dict\n"
+            "    dictionary& dict\n"
             ")"
         )   << "Unphysical Poisson's ratio!"
             << " mag(nu_ij) should be less sqrt(E_i/E_j)"
@@ -456,7 +460,7 @@ Foam::orthotropicLinearElastic::orthotropicLinearElastic
             "(\n"
             "    const word& name,\n"
             "    const fvMesh& mesh,\n"
-            "    const dictionary& dict\n"
+            "    dictionary& dict\n"
             ")"
         )   << "Unphysical Poisson's ratio!"
             << " (1 - nu12*nu21 - nu23*nu32 "
@@ -479,7 +483,7 @@ Foam::orthotropicLinearElastic::orthotropicLinearElastic
             "(\n"
             "    const word& name,\n"
             "    const fvMesh& mesh,\n"
-            "    const dictionary& dict\n"
+            "    dictionary& dict\n"
             ")"
         )   << "The direction vectors must not have zero length!"
             << abort(FatalError);
@@ -504,7 +508,7 @@ Foam::orthotropicLinearElastic::orthotropicLinearElastic
             "(\n"
             "    const word& name,\n"
             "    const fvMesh& mesh,\n"
-            "    const dictionary& dict\n"
+            "    dictionary& dict\n"
             ")"
         )   << "The direction vectors should be locally orthogonal!"
             << abort(FatalError);

@@ -23,8 +23,6 @@ Description
 
     Based on "rotation-free formulation" of Torlak (2006).
 
-    Work in progress.
-
 Author
     Philip Cardiff, UCD.  All rights reserved.
 
@@ -42,8 +40,11 @@ SourceFiles
 #include "pointFields.H"
 #include "uniformDimensionedFields.H"
 #include "areaFields.H"
-#include "lduSolverPerformance.H"
-
+#ifdef OPENFOAMESIORFOUNDATION
+    #include "SolverPerformance.H"
+#else
+    #include "lduSolverPerformance.H"
+#endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -131,8 +132,13 @@ class kirchhoffPlateSolid
         bool converged
         (
             const int iCorr,
+#ifdef OPENFOAMESIORFOUNDATION
+            const SolverPerformance<scalar>& solverPerfM,
+            const SolverPerformance<scalar>& solverPerfw,
+#else
             const lduSolverPerformance& solverPerfM,
             const lduSolverPerformance& solverPerfw,
+#endif
             const areaScalarField& M,
             const areaScalarField& w
         );
@@ -238,8 +244,9 @@ public:
             //- Set traction at specified patch
             virtual void setTraction
             (
+                const label interfaceI,
                 const label patchID,
-                const vectorField& traction
+                const vectorField& faceZoneTraction
             );
 
             //- Write fields

@@ -31,5 +31,20 @@
     <ClCompile Include="numerics\sparseMatrix.C" />
     <ClCompile Include="numerics\sparseMatrixTools.C" />
     <ClCompile Include="numerics\tableReaders.C" />
+    <ClCompile Include="numerics\advancingFrontAMIS4F.C" />
+    <ClCompile Include="numerics\advancingFrontAMIS4FParallelOps.C" />
+    <ClCompile Include="numerics\AMIInterpolationS4F.C" />
+    <ClCompile Include="numerics\AMIInterpolationS4FNew.C" />
+    <ClCompile Include="numerics\faceAreaWeightAMIS4F.C" />
+    <ClCompile Include="numerics\patchCorrectionVectors.C" />
+    <ClCompile Include="numerics\vfvcCellPoint.C" />
+    <ClCompile Include="numerics\vfvmCellPoint.C" />
+    <ClCompile Include="numerics\pointFieldFunctions.C" />
+    <ClCompile Include="numerics\deltaVectors.C" />
+    <ClCompile Include="numerics\minEdgeLength.C" />
+    <ClCompile Include="numerics\multiplyCoeffRectMat.C" />
+    <ClCompile Include="numerics\multiplyCoeffExtended.C" />
+    <ClCompile Include="numerics\pointPointLeastSquaresVectors.C" />
+    <ClCompile Include="numerics\SparseMatrixTemplates.C" />
   </ItemGroup>
 </Project>

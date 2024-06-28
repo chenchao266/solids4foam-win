@@ -33,6 +33,7 @@ Author
 
 #include "eig3.H"
 #include "volFields.H"
+#include "surfaceFields.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -55,6 +56,13 @@ void eig3Field
     const volSymmTensorField& A, volTensorField& V, volDiagTensorField& d
 );
 #endif
+
+void eig3Field
+(
+    const surfaceSymmTensorField& A,
+    surfaceTensorField& V,
+    surfaceVectorField& d
+);
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

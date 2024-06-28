@@ -35,7 +35,7 @@ linearSpatialDisplacementFvPatchVectorField::linearSpatialDisplacementFvPatchVec
 :
     fixedDisplacementFvPatchVectorField(p, iF),
     a_(vector::zero_),
-    b_(vector::zero_)
+    b_(tensor::zero_)
 {}
 
 
@@ -100,7 +100,7 @@ void linearSpatialDisplacementFvPatchVectorField::updateCoeffs()
         return;
     }
 
-    totalDisp() = a_ + cmptMultiply(b_, patch().Cf());
+    totalDisp() = a_ + (b_ & patch().Cf());
 
     fixedDisplacementFvPatchVectorField::updateCoeffs();
 }

@@ -176,11 +176,6 @@ bool nonLinGeomTotalLagSolid::evolve()
         // Enforce any cell displacements
         solidModel::setCellDisps(DDEqn);
 
-        // Hack to avoid expensive copy of residuals
-#ifdef OPENFOAMESI
-        const_cast<dictionary&>(mesh().solverPerformanceDict()).clear();
-#endif
-
         // Solve the linear system
         solverPerfDD = DDEqn.solve();
 
@@ -244,7 +239,7 @@ bool nonLinGeomTotalLagSolid::evolve()
     );
 
     // Interpolate cell displacements to vertices
-    mechanical().interpolate(DD(), pointDD());
+    mechanical().interpolate(DD(), gradDD(), pointDD());
 
     // Increment of displacement
     D() = D().oldTime() + DD();

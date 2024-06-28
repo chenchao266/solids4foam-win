@@ -23,5 +23,7 @@
     <ClCompile Include="fluidModels\sonicLiquidFluid.C" />
     <ClCompile Include="fluidModels\timeVaryingVelocityPointPatchVectorField.C" />
     <ClCompile Include="fluidModels\transitionalParabolicVelocityFvPatchVectorField.C" />
+    <ClCompile Include="fluidModels\thermalRobinFvPatchScalarField.C" />
+    <ClCompile Include="fluidModels\flowRateOutletPressureFvPatchScalarField.C" />
   </ItemGroup>
 </Project>

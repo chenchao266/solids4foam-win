@@ -35,13 +35,16 @@
     <ClCompile Include="solidModels\fixedDisplacementZeroShearFvPatchVectorField.C" />
     <ClCompile Include="solidModels\fixedDisplacementZeroShearPointPatchVectorField.C" />
     <ClCompile Include="solidModels\fixedRotationFvPatchVectorField.C" />
+    <ClCompile Include="solidModels\fixedRotationPointPatchVectorField.C" />
     <ClCompile Include="solidModels\fixedTemperatureFvPatchScalarField.C" />
     <ClCompile Include="solidModels\freeEdgeDisplacementFaPatchScalarField.C" />
     <ClCompile Include="solidModels\frictionContactModel.C" />
     <ClCompile Include="solidModels\frictionLaw.C" />
     <ClCompile Include="solidModels\frictionless.C" />
+    <ClCompile Include="solidModels\kirchhoffPlateSolid.C" />
     <ClCompile Include="solidModels\linearDisplacementFvPatchVectorField.C" />
     <ClCompile Include="solidModels\linearSpatialDisplacementFvPatchVectorField.C" />
+    <ClCompile Include="solidModels\linearSpatialDisplacementPointPatchVectorField.C" />
     <ClCompile Include="solidModels\linGeomPressureDisplacementSolid.C" />
     <ClCompile Include="solidModels\linGeomSolid.C" />
     <ClCompile Include="solidModels\linGeomTotalDispSolid.C" />
@@ -50,20 +53,27 @@
     <ClCompile Include="solidModels\newFrictionContactModel.C" />
     <ClCompile Include="solidModels\newFrictionLaw.C" />
     <ClCompile Include="solidModels\newNormalContactModel.C" />
+    <ClCompile Include="solidModels\newPointNormalContactModel.C" />
     <ClCompile Include="solidModels\nonLinearGeometry.C" />
     <ClCompile Include="solidModels\nonLinGeomTotalLagSolid.C" />
     <ClCompile Include="solidModels\nonLinGeomTotalLagTotalDispSolid.C" />
     <ClCompile Include="solidModels\nonLinGeomUpdatedLagSolid.C" />
     <ClCompile Include="solidModels\normalContactModel.C" />
     <ClCompile Include="solidModels\normalDisplacementFvPatchVectorField.C" />
+    <ClCompile Include="solidModels\normalDisplacementPointPatchVectorField.C" />
     <ClCompile Include="solidModels\oscillateDisplacementFvPatchVectorField.C" />
+    <ClCompile Include="solidModels\pointNormalContactModel.C" />
+    <ClCompile Include="solidModels\pointStandardPenalty.C" />
     <ClCompile Include="solidModels\poroLinGeomSolid.C" />
     <ClCompile Include="solidModels\rigidCylinderContactFvPatchVectorField.C" />
     <ClCompile Include="solidModels\setCellDisplacements.C" />
     <ClCompile Include="solidModels\solidContactFvPatchVectorField.C" />
     <ClCompile Include="solidModels\solidContactFvPatchVectorFieldCalcContact.C" />
+    <ClCompile Include="solidModels\solidContactPointPatchVectorField.C" />
+    <ClCompile Include="solidModels\solidContactPointPatchVectorFieldCalcContact.C" />
     <ClCompile Include="solidModels\solidDirectionMixedFvPatchVectorField.C" />
     <ClCompile Include="solidModels\solidForceFvPatchVectorField.C" />
+    <ClCompile Include="solidModels\solidForcePointPatchVectorField.C" />
     <ClCompile Include="solidModels\solidModel.C" />
     <ClCompile Include="solidModels\solidSymmetryFvPatchScalarField.C" />
     <ClCompile Include="solidModels\solidSymmetryFvPatchVectorField.C" />
@@ -77,10 +87,12 @@
     <ClCompile Include="solidModels\standardPenaltyFriction.C" />
     <ClCompile Include="solidModels\thermalConvectionFvPatchScalarField.C" />
     <ClCompile Include="solidModels\thermalLinGeomSolid.C" />
+    <ClCompile Include="solidModels\thermalSolid.C" />
     <ClCompile Include="solidModels\unsLinGeomSolid.C" />
     <ClCompile Include="solidModels\unsNonLinGeomTotalLagSolid.C" />
     <ClCompile Include="solidModels\unsNonLinGeomUpdatedLagSolid.C" />
     <ClCompile Include="solidModels\vertexCentredLinGeomSolid.C" />
+    <ClCompile Include="solidModels\vertexCentredNonLinGeomTotalLagSolid.C" />
     <ClCompile Include="solidModels\weakThermalLinGeomSolid.C" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -168,9 +180,9 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\..\OpenFOAM-win\OpenFOAM\algorithms;..\..\OpenFOAM-win\OpenFOAM\containers;..\..\OpenFOAM-win\OpenFOAM\db;..\..\OpenFOAM-win\OpenFOAM\dimensionedTypes;..\..\OpenFOAM-win\OpenFOAM\dimensionSet;..\..\OpenFOAM-win\OpenFOAM\fields;..\..\OpenFOAM-win\OpenFOAM\global;..\..\OpenFOAM-win\OpenFOAM\graph;..\..\OpenFOAM-win\OpenFOAM\include;..\..\OpenFOAM-win\OpenFOAM\interpolations;..\..\OpenFOAM-win\OpenFOAM\matrices;..\..\OpenFOAM-win\OpenFOAM\memory;..\..\OpenFOAM-win\OpenFOAM\meshes;..\..\OpenFOAM-win\OpenFOAM\primitives;..\..\OpenFOAM-win\OSspecific;..\..\OpenFOAM-win\finiteVolume;..\..\OpenFOAM-win\meshTools;..\..\OpenFOAM-win\dynamicMesh;..\..\OpenFOAM-win\fileFormats;..\..\OpenFOAM-win\thermophysicalModels;..\..\OpenFOAM-win\transportModels;..\..\OpenFOAM-win\TurbulenceModels;..\..\OpenFOAM-win\topoChangerFvMesh;..\..\OpenFOAM-win\finiteArea;..\..\OpenFOAM-win\faOptions;..\..\OpenFOAM-win\dynamicFvMesh;..\..\OpenFOAM-win\dynamicFaMesh;..\..\OpenFOAM-win\surfMesh;..\..\OpenFOAM-win\phaseSystemModels\twoPhaseInter;.\solidModels;.\physicsModel;.\fluidSolidInterfaces;.\numerics;.\materialModels;.\fluidModels;.\octree\octree;.\block;.\ggi;.\controlSwitches;..\avalanche\gistools;..\..\eigen-3.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\OpenFOAM-win\OpenFOAM\algorithms;..\..\OpenFOAM-win\OpenFOAM\containers;..\..\OpenFOAM-win\OpenFOAM\db;..\..\OpenFOAM-win\OpenFOAM\dimensionedTypes;..\..\OpenFOAM-win\OpenFOAM\dimensionSet;..\..\OpenFOAM-win\OpenFOAM\fields;..\..\OpenFOAM-win\OpenFOAM\global;..\..\OpenFOAM-win\OpenFOAM\graph;..\..\OpenFOAM-win\OpenFOAM\include;..\..\OpenFOAM-win\OpenFOAM\interpolations;..\..\OpenFOAM-win\OpenFOAM\matrices;..\..\OpenFOAM-win\OpenFOAM\memory;..\..\OpenFOAM-win\OpenFOAM\meshes;..\..\OpenFOAM-win\OpenFOAM\primitives;..\..\OpenFOAM-win\OSspecific;..\..\OpenFOAM-win\finiteVolume;..\..\OpenFOAM-win\meshTools;..\..\OpenFOAM-win\dynamicMesh;..\..\OpenFOAM-win\fileFormats;..\..\OpenFOAM-win\thermophysicalModels;..\..\OpenFOAM-win\transportModels;..\..\OpenFOAM-win\TurbulenceModels;..\..\OpenFOAM-win\topoChangerFvMesh;..\..\OpenFOAM-win\finiteArea;..\..\OpenFOAM-win\faOptions;..\..\OpenFOAM-win\dynamicFvMesh;..\..\OpenFOAM-win\dynamicFaMesh;..\..\OpenFOAM-win\surfMesh;..\..\OpenFOAM-win\optimisation;..\..\OpenFOAM-win\phaseSystemModels\twoPhaseInter;.\solidModels;.\physicsModel;.\fluidSolidInterfaces;.\numerics;.\materialModels;.\fluidModels;.\octree\octree;.\block;.\ggi;.\controlSwitches;..\blockCoupledSolids4FoamTools;..\avalanche\gistools;..\..\eigen-3.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
-      <PreprocessorDefinitions>WM_LABEL_SIZE=64;WM_DP;NoRepository;WIN32;WIN64;_WINDOWS;NOMINMAX;_CRT_SECURE_NO_WARNINGS;OPENFOAMESIORFOUNDATION;OPENFOAMESI=2112;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WM_LABEL_SIZE=64;WM_DP;NoRepository;WIN32;WIN64;_WINDOWS;NOMINMAX;_CRT_SECURE_NO_WARNINGS;OPENFOAMESIORFOUNDATION;OPENFOAM_NOT_EXTEND;OPENFOAMESI=2112;OPENFOAM=2112;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

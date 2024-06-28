@@ -22,6 +22,7 @@ License
 #include "fvm.H"
 #include "fvc.H"
 #include "fvMatrices.H"
+#include "processorPolyPatch.H"
 #include "addToRunTimeSelectionTable.H"
 #include "solidTractionFvPatchVectorField.H"
 #ifdef FOAMEXTEND
@@ -298,13 +299,13 @@ bool coupledUnsLinGeomSolid::evolve()
         // Minus means we add to the right-hand side
         volVectorField contrib =
             volVectorField("contrib", AxDivSigmaCellsField - newDivSigma);
-        const labelUList& faceCells0 =
+        const unallocLabelList& faceCells0 =
             mesh().boundaryMesh()[0].faceCells();
         forAll(contrib.boundaryField()[0], faceI)
         {
             contrib.internalField()[faceCells0[faceI]] = vector::zero_;
         }
-        const labelUList& faceCells1 =
+        const unallocLabelList& faceCells1 =
             mesh().boundaryMesh()[1].faceCells();
         forAll(contrib.boundaryField()[1], faceI)
         {

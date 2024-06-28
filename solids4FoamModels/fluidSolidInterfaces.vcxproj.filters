@@ -13,5 +13,6 @@
     <ClCompile Include="fluidSolidInterfaces\oneWayCouplingInterface.C" />
     <ClCompile Include="fluidSolidInterfaces\rbfInterfaceToInterfaceMapping.C" />
     <ClCompile Include="fluidSolidInterfaces\weakCouplingInterface.C" />
+    <ClCompile Include="fluidSolidInterfaces\thermalCouplingInterface.C" />
   </ItemGroup>
 </Project>

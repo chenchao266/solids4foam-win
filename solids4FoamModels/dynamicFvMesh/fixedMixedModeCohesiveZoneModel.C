@@ -125,7 +125,7 @@ void Foam::fixedMixedModeCohesiveZoneModel::calcPenaltyFactor() const
         scalar cellVolume = 0.0;
 
         const volScalarField::DimensionedInternalField& V = mesh.V();
-        const labelUList& faceCells =
+        const unallocLabelList& faceCells =
             mesh.boundary()[patchID].faceCells();
 
         forAll(mesh.boundary()[patchID], facei)

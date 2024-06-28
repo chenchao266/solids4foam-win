@@ -134,8 +134,8 @@ void Foam::variableMixedModeCohesiveZoneModel::calcPenaltyFactor() const
         // average contact patch cell volume
         scalar cellVolume = 0.0;
 
-        const DimensionedField<scalar, volMesh>& V = mesh.V();
-        const labelUList& faceCells =
+        const volScalarField::DimensionedInternalField& V = mesh.V();
+        const unallocLabelList& faceCells =
             mesh.boundary()[patchID].faceCells();
 
         forAll(mesh.boundary()[patchID], facei)

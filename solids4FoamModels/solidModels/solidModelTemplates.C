@@ -40,17 +40,40 @@ bool Foam::solidModel::converged
     bool converged = false;
 
     // Calculate displacement residual based on the relative change of vf
-    scalar denom = gMax
-    (
-#ifdef OPENFOAMESIORFOUNDATION
-        DimensionedField<scalar, volMesh>
-#else
-        Field<scalar>
-#endif
+    scalar denom = 0.0;
+
+    // Denom is displacement increment
+    if (incremental())
+    {
+        // Incremental approach
+        denom = gMax
         (
-            mag(vf.internalField() - vf.oldTime().internalField())
-        )
-    );
+#ifdef OPENFOAMESIORFOUNDATION
+            DimensionedField<scalar, volMesh>
+#else
+            Field<scalar>
+#endif
+            (
+                mag(vf.internalField())
+            )
+        );
+    }
+    else
+    {
+        // Total appraoch
+        denom = gMax
+        (
+#ifdef OPENFOAMESIORFOUNDATION
+            DimensionedField<scalar, volMesh>
+#else
+            Field<scalar>
+#endif
+            (
+                mag(vf.internalField() - vf.oldTime().internalField())
+            )
+        );
+    }
+
     if (denom < SMALL)
     {
         denom = max
@@ -153,7 +176,8 @@ bool Foam::solidModel::converged
             Info<< endl;
         }
     }
-    else if (iCorr == nCorr_ - 1)
+
+    if (iCorr == nCorr_ - 1 && !converged)
     {
         maxIterReached_++;
         Warning

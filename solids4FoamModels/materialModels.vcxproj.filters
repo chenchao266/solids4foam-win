@@ -28,5 +28,8 @@
     <ClCompile Include="materialModels\viscoNeoHookeanElastic.C" />
     <ClCompile Include="materialModels\viscousHookeanElastic.C" />
     <ClCompile Include="materialModels\YeohElastic.C" />
+    <ClCompile Include="materialModels\electroMechanicalLaw.C" />
+    <ClCompile Include="materialModels\GuccioneElastic.C" />
+    <ClCompile Include="materialModels\rotationInvariantLinearElastic.C" />
   </ItemGroup>
 </Project>

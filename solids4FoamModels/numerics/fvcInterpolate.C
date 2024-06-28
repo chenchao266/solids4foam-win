@@ -85,8 +85,8 @@ interpolate
 
     const Field<Type>& pfI = pf.internalField();
 
-//     const labelUList& owner = mesh.owner();
-//     const labelUList& neighbour = mesh.neighbour();
+//     const unallocLabelList& owner = mesh.owner();
+//     const unallocLabelList& neighbour = mesh.neighbour();
 
     forAll(resultI, faceI)
     {

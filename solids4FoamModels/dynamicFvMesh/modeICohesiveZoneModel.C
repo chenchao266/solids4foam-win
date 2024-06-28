@@ -1,10 +1,4 @@
 /*---------------------------------------------------------------------------*\
-  =========                 |
-  \\      /  F ield         | foam-extend: Open Source CFD
-   \\    /   O peration     |
-    \\  /    A nd           | For copyright notice see file Copyright
-     \\/     M anipulation  |
--------------------------------------------------------------------------------
 License
     This file is part of solids4foam.
 
@@ -83,7 +77,7 @@ void Foam::modeICohesiveZoneModel::calcPenaltyFactor() const
         scalar cellVolume = 0.0;
 
         const volScalarField::DimensionedInternalField& V = mesh.V();
-        const labelUList& faceCells =
+        const unallocLabelList& faceCells =
             mesh.boundary()[patchID].faceCells();
 
         forAll(mesh.boundary()[patchID], facei)

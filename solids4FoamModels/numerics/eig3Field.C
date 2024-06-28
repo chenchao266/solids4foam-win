@@ -149,6 +149,50 @@ void eig3Field
 }
 #endif
 
+
+void eig3Field
+(
+    const surfaceSymmTensorField& A,
+    surfaceTensorField& V,
+    surfaceVectorField& d
+)
+{
+    const symmTensorField& AI = A.internalField();
+#ifdef OPENFOAMESIORFOUNDATION
+    tensorField& VI = V.primitiveFieldRef();
+    vectorField& dI = d.primitiveFieldRef();
+#else
+    tensorField& VI = V.internalField();
+    vectorField& dI = d.internalField();
+#endif
+
+    forAll(AI, cellI)
+    {
+        eig3().eigen_decomposition(AI[cellI], VI[cellI], dI[cellI]);
+    }
+
+    forAll(A.boundaryField(), patchI)
+    {
+        if (A.boundaryField()[patchI].type() != "empty")
+        {
+            const symmTensorField& AB = A.boundaryField()[patchI];
+#ifdef OPENFOAMESIORFOUNDATION
+            tensorField& VB = V.boundaryFieldRef()[patchI];
+            vectorField& dB = d.boundaryFieldRef()[patchI];
+#else
+            tensorField& VB = V.boundaryField()[patchI];
+            vectorField& dB = d.boundaryField()[patchI];
+#endif
+
+            forAll(AB, faceI)
+            {
+                eig3().eigen_decomposition(AB[faceI], VB[faceI], dB[faceI]);
+            }
+        }
+    }
+}
+
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 } // End namespace Foam

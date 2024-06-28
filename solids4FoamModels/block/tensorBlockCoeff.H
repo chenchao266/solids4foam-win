@@ -39,7 +39,7 @@ Author
 
 #include "BlockCoeff.H"
 #include "DecoupledBlockCoeff.H"
-#include "tensor.H"
+#include "tensor2.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

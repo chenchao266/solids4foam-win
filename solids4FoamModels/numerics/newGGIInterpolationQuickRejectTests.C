@@ -337,7 +337,7 @@ void newGGIInterpolation<MasterPatch, SlavePatch>::findNeighboursAABB
 
     // We expect that any neighbour face to face intersection will fall
     // within augmented BB.
-    vectorField slaveFaceBBminThickness(slavePatch_.size(), vector::zero);
+    vectorField slaveFaceBBminThickness(slavePatch_.size(), vector::zero_);
 
     const faceList& slaveLocalFaces = slavePatch_.localFaces();
     vectorField slaveNormals = slavePatch_.faceNormals();
@@ -445,8 +445,8 @@ void newGGIInterpolation<MasterPatch, SlavePatch>::findNeighboursAABB
         }
     }
 
-    int countMaster(0);
-    int countSlave(0);
+    //int countMaster(0);
+    //int countSlave(0);
 
     // Parallel search split.  HJ, 27/Apr/2016
     for
@@ -459,14 +459,14 @@ void newGGIInterpolation<MasterPatch, SlavePatch>::findNeighboursAABB
     {
         if (checkMasterFace[faceMi - pmStart])
         {
-            countMaster++;
-            countSlave = 0;
+            //countMaster++;
+            //countSlave = 0;
 
             forAll(slavePatchBB, faceSi)
             {
                 if (checkSlaveFace[faceSi])
                 {
-                    countSlave++;
+                    //countSlave++;
 
                     // Compute the augmented AABB
                     boundBox augmentedBBMaster
@@ -712,7 +712,7 @@ void newGGIInterpolation<MasterPatch, SlavePatch>::updateNeighboursAABB
 
     // We expect that any neighbour face to face intersection will fall
     // within augmented BB.
-    vectorField slaveFaceBBminThickness(slavePatch_.size(), vector::zero);
+    vectorField slaveFaceBBminThickness(slavePatch_.size(), vector::zero_);
 
     const faceList& slaveLocalFaces = slavePatch_.localFaces();
     vectorField slaveNormals = slavePatch_.faceNormals();

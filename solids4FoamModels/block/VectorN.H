@@ -38,7 +38,7 @@ SourceFiles
 #define VectorN_H
 
 #include "VectorSpace.H"
-#include "tensor.H"
+#include "tensor2.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -68,10 +68,10 @@ public:
     // Static data members
 
         static const char* const typeName;
-        static const VectorN zero;
-        static const VectorN one;
-        static const VectorN max;
-        static const VectorN min;
+        static const VectorN zero_;
+        static const VectorN one_;
+        static const VectorN max_;
+        static const VectorN min_;
 
 
     // Constructors

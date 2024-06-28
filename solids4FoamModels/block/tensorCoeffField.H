@@ -40,7 +40,7 @@ SourceFiles
 
 #include "CoeffField.H"
 #include "DecoupledCoeffField.H"
-#include "tensor.H"
+#include "tensor2.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

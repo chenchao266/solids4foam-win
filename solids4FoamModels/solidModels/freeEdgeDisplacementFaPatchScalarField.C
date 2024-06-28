@@ -23,6 +23,8 @@ License
 
 \*---------------------------------------------------------------------------*/
 
+#ifndef OPENFOAMFOUNDATION
+
 #include "freeEdgeDisplacementFaPatchScalarField.H"
 #include "addToRunTimeSelectionTable.H"
 #include "kirchhoffPlateSolid.H"
@@ -223,5 +225,7 @@ namespace Foam
         freeEdgeDisplacementFaPatchScalarField
     );
 }
+
+#endif // OPENFOAMFOUNDATION
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

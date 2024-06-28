@@ -21,6 +21,9 @@
   <ItemGroup>
     <ClCompile Include="functionObjects\cantileverAnalyticalSolution.C" />
     <ClCompile Include="functionObjects\cantileverStressDisplacement.C" />
+    <ClCompile Include="functionObjects\contactPatchTestAnalyticalSolution.C" />
+    <ClCompile Include="functionObjects\curvedCantileverAnalyticalSolution.C" />
+    <ClCompile Include="functionObjects\fsiConvergenceData.C" />
     <ClCompile Include="functionObjects\hotCylinderAnalyticalSolution.C" />
     <ClCompile Include="functionObjects\hydrostaticPressure.C" />
     <ClCompile Include="functionObjects\plateHoleAnalyticalSolution.C" />
@@ -31,6 +34,7 @@
     <ClCompile Include="functionObjects\solidForcesDisplacements.C" />
     <ClCompile Include="functionObjects\solidKineticEnergy.C" />
     <ClCompile Include="functionObjects\solidPointDisplacement.C" />
+    <ClCompile Include="functionObjects\solidPointDisplacementAlongLine.C" />
     <ClCompile Include="functionObjects\solidPointStress.C" />
     <ClCompile Include="functionObjects\solidPointTemperature.C" />
     <ClCompile Include="functionObjects\solidPotentialEnergy.C" />
@@ -38,6 +42,7 @@
     <ClCompile Include="functionObjects\solidTorque.C" />
     <ClCompile Include="functionObjects\solidTractions.C" />
     <ClCompile Include="functionObjects\stressTriaxiality.C" />
+    <ClCompile Include="functionObjects\transformStressToCylindrical.C" />
     <ClCompile Include="functionObjects\volumetricStrain.C" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -125,9 +130,9 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\..\OpenFOAM-win\OpenFOAM\algorithms;..\..\OpenFOAM-win\OpenFOAM\containers;..\..\OpenFOAM-win\OpenFOAM\db;..\..\OpenFOAM-win\OpenFOAM\dimensionedTypes;..\..\OpenFOAM-win\OpenFOAM\dimensionSet;..\..\OpenFOAM-win\OpenFOAM\fields;..\..\OpenFOAM-win\OpenFOAM\global;..\..\OpenFOAM-win\OpenFOAM\graph;..\..\OpenFOAM-win\OpenFOAM\include;..\..\OpenFOAM-win\OpenFOAM\interpolations;..\..\OpenFOAM-win\OpenFOAM\matrices;..\..\OpenFOAM-win\OpenFOAM\memory;..\..\OpenFOAM-win\OpenFOAM\meshes;..\..\OpenFOAM-win\OpenFOAM\primitives;..\..\OpenFOAM-win\OSspecific;..\..\OpenFOAM-win\finiteVolume;..\..\OpenFOAM-win\meshTools;..\..\OpenFOAM-win\dynamicMesh;..\..\OpenFOAM-win\fileFormats;..\..\OpenFOAM-win\thermophysicalModels;..\..\OpenFOAM-win\transportModels;..\..\OpenFOAM-win\TurbulenceModels;..\..\OpenFOAM-win\topoChangerFvMesh;..\..\OpenFOAM-win\dynamicFvMesh;..\..\OpenFOAM-win\phaseSystemModels\twoPhaseInter;.\solidModels;.\physicsModel;.\fluidSolidInterfaces;.\numerics;.\materialModels;.\fluidModels;.\octree\octree;.\block;.\ggi;.\controlSwitches;..\..\eigen-3.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\OpenFOAM-win\OpenFOAM\algorithms;..\..\OpenFOAM-win\OpenFOAM\containers;..\..\OpenFOAM-win\OpenFOAM\db;..\..\OpenFOAM-win\OpenFOAM\dimensionedTypes;..\..\OpenFOAM-win\OpenFOAM\dimensionSet;..\..\OpenFOAM-win\OpenFOAM\fields;..\..\OpenFOAM-win\OpenFOAM\global;..\..\OpenFOAM-win\OpenFOAM\graph;..\..\OpenFOAM-win\OpenFOAM\include;..\..\OpenFOAM-win\OpenFOAM\interpolations;..\..\OpenFOAM-win\OpenFOAM\matrices;..\..\OpenFOAM-win\OpenFOAM\memory;..\..\OpenFOAM-win\OpenFOAM\meshes;..\..\OpenFOAM-win\OpenFOAM\primitives;..\..\OpenFOAM-win\OSspecific;..\..\OpenFOAM-win\finiteVolume;..\..\OpenFOAM-win\meshTools;..\..\OpenFOAM-win\dynamicMesh;..\..\OpenFOAM-win\fileFormats;..\..\OpenFOAM-win\thermophysicalModels;..\..\OpenFOAM-win\transportModels;..\..\OpenFOAM-win\TurbulenceModels;..\..\OpenFOAM-win\topoChangerFvMesh;..\..\OpenFOAM-win\dynamicFvMesh;..\..\OpenFOAM-win\phaseSystemModels\twoPhaseInter;.\solidModels;.\physicsModel;.\fluidSolidInterfaces;.\numerics;.\materialModels;.\fluidModels;.\octree\octree;.\block;.\ggi;.\controlSwitches;..\blockCoupledSolids4FoamTools;..\..\eigen-3.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
-      <PreprocessorDefinitions>WM_LABEL_SIZE=64;WM_DP;NoRepository;WIN32;WIN64;_WINDOWS;NOMINMAX;_CRT_SECURE_NO_WARNINGS;OPENFOAMESIORFOUNDATION;OPENFOAMESI=2112;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WM_LABEL_SIZE=64;WM_DP;NoRepository;WIN32;WIN64;_WINDOWS;NOMINMAX;_CRT_SECURE_NO_WARNINGS;OPENFOAMESIORFOUNDATION;OPENFOAM_NOT_EXTEND;OPENFOAMESI=2112;OPENFOAM=2112;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

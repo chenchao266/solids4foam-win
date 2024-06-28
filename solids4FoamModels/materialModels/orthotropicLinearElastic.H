@@ -122,6 +122,7 @@ class orthotropicLinearElastic
         //- Shear modulus in local 31 plane
         dimensionedScalar G31_;
 
+#ifdef FOAMEXTEND
         //- Fourth order elasticity tensor volField
         //  Relative to the global Cartesian axis
         mutable autoPtr<volSymmTensor4thOrderField> elasticCPtr_;
@@ -129,7 +130,15 @@ class orthotropicLinearElastic
         //- Fourth order elasticity tensor surfaceField
         //  Relative to the global Cartesian axis
         mutable autoPtr<surfaceSymmTensor4thOrderField> elasticCfPtr_;
+#else
+        //- Fourth order elasticity tensor volField
+        //  Relative to the global Cartesian axis
+        mutable autoPtr<volTensorField> elasticCPtr_;
 
+        //- Fourth order elasticity tensor surfaceField
+        //  Relative to the global Cartesian axis
+        mutable autoPtr<surfaceTensorField> elasticCfPtr_;
+#endif
 
         //- Material local x direction field
         volVectorField matDirX_;
@@ -149,12 +158,19 @@ class orthotropicLinearElastic
         //- Make elasticCf field
         void makeElasticCf() const;
 
+#ifdef FOAMEXTEND
         //- Return elasticC field
         const volSymmTensor4thOrderField& elasticC() const;
 
         //- Return elasticCf field
         const surfaceSymmTensor4thOrderField& elasticCf() const;
+#else
+        //- Return elasticC field
+        const volTensorField& elasticC() const;
 
+        //- Return elasticCf field
+        const surfaceTensorField& elasticCf() const;
+#endif
 
         //- Disallow default bitwise copy construct
         orthotropicLinearElastic(const orthotropicLinearElastic&);

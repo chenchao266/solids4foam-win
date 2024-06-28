@@ -21,5 +21,10 @@
     <ClCompile Include="functionObjects\solidTractions.C" />
     <ClCompile Include="functionObjects\stressTriaxiality.C" />
     <ClCompile Include="functionObjects\volumetricStrain.C" />
+    <ClCompile Include="functionObjects\curvedCantileverAnalyticalSolution.C" />
+    <ClCompile Include="functionObjects\contactPatchTestAnalyticalSolution.C" />
+    <ClCompile Include="functionObjects\solidPointDisplacementAlongLine.C" />
+    <ClCompile Include="functionObjects\transformStressToCylindrical.C" />
+    <ClCompile Include="functionObjects\fsiConvergenceData.C" />
   </ItemGroup>
 </Project>

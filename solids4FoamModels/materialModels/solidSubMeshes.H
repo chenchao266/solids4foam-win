@@ -50,7 +50,7 @@ Author
 #include "surfaceFields.H"
 #include "newFvMeshSubset.H"
 #ifdef OPENFOAMESIORFOUNDATION
-    #include "volPointInterpolation.H"
+    #include "enhancedVolPointInterpolation.H"
 #else
     #include "newLeastSquaresVolPointInterpolation.H"
 #endif
@@ -59,7 +59,10 @@ Author
 
 namespace Foam
 {
-
+    // labelUList in OpenFOAM is the same as unallocLabelList in foam extend
+#ifdef OPENFOAMESIORFOUNDATION
+    typedef labelUList unallocLabelList;
+#endif
 
 /*---------------------------------------------------------------------------* \
                         Class solidSubMeshes Declaration
@@ -87,7 +90,7 @@ class solidSubMeshes
 
         //- Volume field to point field interpolator for each sub-mesh
         #ifdef OPENFOAMESIORFOUNDATION
-        mutable PtrList<volPointInterpolation> subMeshVolToPoint_;
+        mutable PtrList<enhancedVolPointInterpolation> subMeshVolToPoint_;
         #else
         mutable PtrList<newLeastSquaresVolPointInterpolation>
             subMeshVolToPoint_;
@@ -266,7 +269,7 @@ public:
 
             //- Return a const reference to the vol-to-point interpolators
             #ifdef OPENFOAMESIORFOUNDATION
-            const PtrList<volPointInterpolation>& subMeshVolToPoint() const;
+            const PtrList<enhancedVolPointInterpolation>& subMeshVolToPoint() const;
             #else
             const PtrList<newLeastSquaresVolPointInterpolation>&
                 subMeshVolToPoint() const;

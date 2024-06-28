@@ -414,8 +414,8 @@ coupledNonLinGeomPressureDisplacementSolid
         const surfaceScalarField& magS = mesh().magSf();
         const scalarField& magSI = magS.internalField();
 
-        const labelUList& own = mesh().owner();
-        const labelUList& nei = mesh().neighbour();
+        const unallocLabelList& own = mesh().owner();
+        const unallocLabelList& nei = mesh().neighbour();
 
         const scalarField& impKfI = impKf_.internalField();
 

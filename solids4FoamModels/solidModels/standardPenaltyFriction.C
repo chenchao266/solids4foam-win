@@ -34,7 +34,7 @@ namespace Foam
     );
 
 #ifdef OPENFOAMESIORFOUNDATION
-    typedef labelUList labelUList;
+    typedef labelUList unallocLabelList;
 #endif
 }
 
@@ -93,7 +93,7 @@ void Foam::standardPenaltyFriction::calcFrictionPenaltyFactor()
 #endif
 
         {
-            const labelUList& faceCells =
+            const unallocLabelList& faceCells =
                 mesh_.boundary()[masterPatchIndex].faceCells();
             forAll(mesh_.boundary()[masterPatchIndex], facei)
             {
@@ -101,7 +101,7 @@ void Foam::standardPenaltyFriction::calcFrictionPenaltyFactor()
             }
         }
         {
-            const labelUList& faceCells =
+            const unallocLabelList& faceCells =
                 mesh_.boundary()[slavePatchIndex].faceCells();
             forAll(mesh_.boundary()[slavePatchIndex], facei)
             {
@@ -134,7 +134,7 @@ void Foam::standardPenaltyFriction::calcFrictionPenaltyFactor()
 #endif
 
         {
-            const labelUList& faceCells =
+            const unallocLabelList& faceCells =
                 mesh_.boundary()[slavePatchIndex].faceCells();
             forAll(mesh_.boundary()[slavePatchIndex], facei)
             {
@@ -183,11 +183,11 @@ Foam::standardPenaltyFriction::standardPenaltyFriction
     frictionContactModelDict_(dict.subDict(name + "FrictionModelDict")),
     frictionLawPtr_(),
     mesh_(patch.boundaryMesh().mesh()),
-    slaveTractionVolField_
+    tractionVolField_
     (
         IOobject
         (
-            "slaveShearTraction_" + mesh_.boundaryMesh()[slavePatchID].name(),
+            "shearTraction_" + mesh_.boundaryMesh()[slavePatchID].name(),
             mesh_.time().timeName(),
             mesh_,
             IOobject::NO_READ,
@@ -196,9 +196,14 @@ Foam::standardPenaltyFriction::standardPenaltyFriction
         mesh_,
         dimensionedVector("zero", dimPressure, vector::zero_)
     ),
-    slip_
+    slipOnSlave_
     (
-        slaveTractionVolField_.boundaryField()[slavePatchID].size(),
+        tractionVolField_.boundaryField()[slavePatchID].size(),
+        vector::zero_
+    ),
+    slipOnMaster_
+    (
+        tractionVolField_.boundaryField()[masterPatchID].size(),
         vector::zero_
     ),
     frictionPenaltyFactor_(-1),
@@ -238,8 +243,9 @@ Foam::standardPenaltyFriction::standardPenaltyFriction
     frictionContactModelDict_(fm.frictionContactModelDict_),
     frictionLawPtr_(fm.frictionLawPtr_->clone().ptr()),
     mesh_(fm.mesh_),
-    slaveTractionVolField_(fm.slaveTractionVolField_),
-    slip_(fm.slip_),
+    tractionVolField_(fm.tractionVolField_),
+    slipOnSlave_(fm.slipOnSlave_),
+    slipOnMaster_(fm.slipOnMaster_),
     frictionPenaltyFactor_(fm.frictionPenaltyFactor_),
     frictionPenaltyScale_(fm.frictionPenaltyScale_),
     relaxFac_(fm.relaxFac_),
@@ -259,7 +265,7 @@ void Foam::standardPenaltyFriction::correct
 (
     const vectorField& slavePressure,
     const vectorField& slaveFaceNormals,
-    const scalarField& areaInContact,
+    const scalarField& slavePatchAreaInContact,
     const vectorField& slaveDD,
     const vectorField& masterDDInterpToSlave
 )
@@ -270,8 +276,8 @@ void Foam::standardPenaltyFriction::correct
 
     // Calculate slave shear traction increments
     const scalarField magSlavePressure(mag(slavePressure));
-    label numSlipFaces = 0;
-    label numStickFaces = 0;
+    // label numSlipFaces = 0;
+    // label numStickFaces = 0;
     scalarField& stickSlip = stickSlipFaces();
     const scalarField oldStickSlip = stickSlip;
     const scalar frictionPenaltyFac = frictionPenaltyFactor();
@@ -281,21 +287,22 @@ void Foam::standardPenaltyFriction::correct
 
     forAll(magSlavePressure, faceI)
     {
-        if (areaInContact[faceI] > SMALL)
+        if (slavePatchAreaInContact[faceI] > SMALL)
         {
             // Compute slip as the we need the difference of DD between the
             // master and slave
-            slip_[faceI] = slaveDD[faceI] - masterDDInterpToSlave[faceI];
+            slipOnSlave_[faceI] = slaveDD[faceI] - masterDDInterpToSlave[faceI];
 
             // The shear traction direction is got by removing the normal
             // component of the DD
             //     (I - sqr(n)) removes the normal
             //    sqr(n) would remove the shear
-            slip_[faceI] = (I - sqr(slaveFaceNormals[faceI])) & slip_[faceI];
+            slipOnSlave_[faceI] =
+                (I - sqr(slaveFaceNormals[faceI])) & slipOnSlave_[faceI];
 
-            newSlaveTraction[faceI] = -frictionPenaltyFac*slip_[faceI];
+            newSlaveTraction[faceI] = -frictionPenaltyFac*slipOnSlave_[faceI];
 
-            const scalar magSlip = mag(slip_[faceI]);
+            const scalar magSlip = mag(slipOnSlave_[faceI]);
             maxMagSlip = max(maxMagSlip, magSlip);
 
             const scalar deltaT = mesh.time().deltaTValue();
@@ -311,7 +318,7 @@ void Foam::standardPenaltyFriction::correct
                 frictionLawPtr_().slipTraction
                 (
                     magSlavePressure[faceI],    // Contact pressure
-                    slip_[faceI],               // Slip vector
+                    slipOnSlave_[faceI],               // Slip vector
                     slaveVelocity,              // Velocity of slave face
                     masterVelocity,             // Velocity of master face
                     slavePatchIndex,            // Slave patch index
@@ -325,14 +332,14 @@ void Foam::standardPenaltyFriction::correct
                 // elastic slip should be zero but is finite due to penalty
                 // stiffness. plastic slip is the permanent deformation
                 newSlaveTraction[faceI] =
-                    slipTraction[faceI]*(-slip_[faceI]/magSlip);
+                    slipTraction[faceI]*(-slipOnSlave_[faceI]/magSlip);
 
-                numSlipFaces++;
+                // numSlipFaces++;
                 stickSlip[faceI] = 1;
             }
             else
             {
-                numStickFaces++;
+                // numStickFaces++;
                 stickSlip[faceI] = 2;
             }
         }
@@ -356,6 +363,111 @@ void Foam::standardPenaltyFriction::correct
 }
 
 
+void Foam::standardPenaltyFriction::correct
+(
+    const vectorField& patchPressure,
+    const vectorField& patchFaceNormals,
+    const scalarField& patchAreaInContact,
+    const vectorField& DD,
+    const vectorField& shadowDDInterpToPatch,
+    const bool master
+)
+{
+    // Preliminaries
+    const fvMesh& mesh = mesh_;
+    label patchIndex = -1;
+
+    if (master)
+    {
+        patchIndex = masterPatchID();
+    }
+    else
+    {
+        patchIndex = slavePatchID();
+    }
+
+    const scalarField magPressure(mag(patchPressure));
+
+    const scalar frictionPenaltyFac = frictionPenaltyFactor();
+
+    scalarField slipTraction(magPressure.size(), 0.0);
+    vectorField newTraction(slipTraction.size(), vector::zero_);
+    scalar maxMagSlip = 0.0;
+
+
+    forAll(magPressure, faceI)
+    {
+        if (patchAreaInContact[faceI] > SMALL)
+        {
+            vector& faceSlip = slip(master)[faceI];
+
+            // Compute slip as the we need the difference of DD between patches
+            faceSlip = DD[faceI] - shadowDDInterpToPatch[faceI];
+
+            // The shear traction direction is got by removing the normal
+            // component of the DD
+            faceSlip = (I - sqr(patchFaceNormals[faceI])) & faceSlip;
+
+            newTraction[faceI] = -frictionPenaltyFac*faceSlip;
+
+            const scalar magSlip = mag(faceSlip);
+            maxMagSlip = max(maxMagSlip, magSlip);
+
+            const scalar deltaT = mesh.time().deltaTValue();
+            const vector faceVelocity = DD[faceI]/deltaT;
+            const vector shadowFaceVelocity =
+                shadowDDInterpToPatch[faceI]/deltaT;
+
+            // Traction to cause slipping i.e. the maximum shear traction the
+            // face can hold for the given pressure, velocities, temperature,
+            // etc.
+            // Note: the actual friction law is implemented through the run-time
+            // selectable frictionLaw
+            slipTraction[faceI] =
+                frictionLawPtr_().slipTraction
+                (
+                    magPressure[faceI],         // Contact pressure
+                    faceSlip,                   // Slip vector
+                    faceVelocity,               // Face velocity
+                    shadowFaceVelocity,         // Shadow face velocity
+                    patchIndex,                 // Patch index
+                    faceI                       // Local face ID
+                );
+
+            if ((mag(newTraction[faceI]) - slipTraction[faceI]) > SMALL)
+            {
+                // Analogous to plasticity
+                // slip is a combination of elastic slip and plastic slip
+                // elastic slip should be zero but is finite due to penalty
+                // stiffness. plastic slip is the permanent deformation
+                newTraction[faceI] =
+                    slipTraction[faceI]*(-faceSlip/magSlip);
+
+                // stickSlip field is not updated. Should be added.
+            }
+        }
+        else
+        {
+            // No friction if pressure is negative or zero or face is not in
+            // contact
+            newTraction[faceI] = vector::zero_;
+            slipTraction[faceI] = 0.0;
+        }
+    }
+
+    vectorField& patchTraction =
+#ifdef FOAMEXTEND
+        tractionVolField_.boundaryField()[patchIndex];
+#else
+        tractionVolField_.boundaryFieldRef()[patchIndex];
+#endif
+
+    // Under-relax traction
+    patchTraction =
+        relaxFac_*newTraction + (1.0 - relaxFac_)*patchTraction;
+}
+
+
 void Foam::standardPenaltyFriction::autoMap(const fvPatchFieldMapper& m)
 {
     frictionContactModel::autoMap(m);
@@ -369,17 +481,19 @@ void Foam::standardPenaltyFriction::autoMap(const fvPatchFieldMapper& m)
     }
 
 #ifdef OPENFOAMFOUNDATION
-    m(slip_, slip_);
+    m(slipOnSlave_, slipOnSlave_);
+    m(slipOnMaster_, slipOnMaster_);
 #else
-    slip_.autoMap(m);
+    slipOnSlave_.autoMap(m);
+    slipOnMaster_.autoMap(m);
 #endif
 
     // The internal fields for the volFields should always be zero
     // We will reset them as they may not be zero after field advection
 #ifdef OPENFOAMESIORFOUNDATION
-    slaveTractionVolField_.primitiveFieldRef() = vector::zero_;
+    tractionVolField_.primitiveFieldRef() = vector::zero_;
 #else
-    slaveTractionVolField_.internalField() = vector::zero_;
+    tractionVolField_.internalField() = vector::zero_;
 #endif
 }
 

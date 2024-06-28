@@ -28,6 +28,7 @@ License
 #include "extendedLeastSquaresVectors.H"
 #include "surfaceFields.H"
 #include "volFields.H"
+#include "demandDrivenData.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
@@ -117,8 +118,8 @@ void Foam::extendedLeastSquaresVectors::makeLeastSquaresVectors() const
     const labelList& owner = mesh().owner();
     const labelList& neighbour = mesh().neighbour();
 #else
-    const labelUList& owner = mesh().owner();
-    const labelUList& neighbour = mesh().neighbour();
+    const unallocLabelList& owner = mesh().owner();
+    const unallocLabelList& neighbour = mesh().neighbour();
 #endif
     const volVectorField& C = mesh().C();
 
@@ -147,7 +148,7 @@ void Foam::extendedLeastSquaresVectors::makeLeastSquaresVectors() const
 #ifdef OPENFOAMESI
         const labelList& faceCells = p.faceCells();
 #else
-        const labelUList& faceCells = p.faceCells();
+        const unallocLabelList& faceCells = p.faceCells();
 #endif
         // Better version of d-vectors: Zeljko Tukovic, 25/Apr/2010
         vectorField pd(p.delta());
@@ -256,7 +257,7 @@ void Foam::extendedLeastSquaresVectors::makeLeastSquaresVectors() const
 #ifdef OPENFOAMESI
         const labelList& faceCells = p.faceCells();
 #else
-        const labelUList& faceCells = p.faceCells();
+        const unallocLabelList& faceCells = p.faceCells();
 #endif
 
         forAll(p, patchFaceI)

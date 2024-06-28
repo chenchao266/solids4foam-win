@@ -78,6 +78,11 @@ elasticWallPressureFvPatchScalarField::elasticWallPressureFvPatchScalarField
         Field<scalar>::operator=(scalarField("value", dict, p.size()));
     }
 
+    if (dict.found("prevPressure"))
+    {
+        Field<scalar>::operator=(scalarField("prevPressure", dict, p.size()));
+    }
+
     this->coeff0() = 1.0;
     this->coeff1() = 1.0;
 }
@@ -202,7 +207,8 @@ void elasticWallPressureFvPatchScalarField::updateCoeffs()
             mesh.time().constant(),
             mesh,
             IOobject::MUST_READ,
-            IOobject::NO_WRITE
+            IOobject::NO_WRITE,
+            false  // Do not register
         )
     );
 
@@ -285,6 +291,11 @@ void elasticWallPressureFvPatchScalarField::patchFlux
 void elasticWallPressureFvPatchScalarField::write(Ostream& os) const
 {
     robinFvPatchScalarField::write(os);
+#ifdef OPENFOAMFOUNDATION
+    writeEntry(os, "prevPressure", prevPressure_);
+#else
+    prevPressure_.writeEntry("prevPressure", os);
+#endif
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

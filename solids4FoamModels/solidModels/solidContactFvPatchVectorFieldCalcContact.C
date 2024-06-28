@@ -345,7 +345,7 @@ void Foam::solidContactFvPatchVectorField::calcZoneToZones() const
                     zone().globalPatch(),
                     shadowZones()[shadPatchI].globalPatch(),
                     faceAreaIntersect::tmMesh, // triMode
-                    true,   // requireMatch
+                    false,   // requireMatch
                     -1,     // lowWeightCorrection
                     false,  // reverseTarget
                     true    // use globalPolyPatch
@@ -371,6 +371,17 @@ void Foam::solidContactFvPatchVectorField::calcZoneToZones() const
             );
 
 #ifndef OPENFOAMESIORFOUNDATION
+            // Check pointwise or integral normal gap calculation
+            const Switch integralNormalGap =
+                dict_.lookupOrDefault<Switch>
+                (
+                    "integralNormalGap", true
+                );
+            Info<< "integralNormalGap: " << integralNormalGap << endl;
+
+            zoneToZones_[shadPatchI].normalGapIntegration() =
+                integralNormalGap;
+
             // Check which point distance calculation method to use
             const Switch useNewPointDistanceMethod =
                 dict_.lookupOrDefault<Switch>
@@ -380,7 +391,9 @@ void Foam::solidContactFvPatchVectorField::calcZoneToZones() const
 
             Info<< "    " << type() << ": " << patch().name() << nl
                 << "        useNewPointDistanceMethod: "
-                << useNewPointDistanceMethod
+                << useNewPointDistanceMethod << nl
+                << "        integralNormalGap: "
+                << integralNormalGap
                 << endl;
 
             zoneToZones_[shadPatchI].useNewPointDistanceMethod() =

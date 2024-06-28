@@ -23,7 +23,10 @@ License
 #include "emptyPolyPatch.H"
 #include "wedgePolyPatch.H"
 #include "cyclicFvPatch.H"
+#include "processorPolyPatch.H"
 #include "transform.H"
+#include "fixedValuePointPatchFields.H"
+
 #ifdef FOAMEXTEND
     #include "cyclicGgiPolyPatch.H"
     #include "cyclicGgiFvPatchFields.H"
@@ -232,7 +235,7 @@ void newLeastSquaresVolPointInterpolation::interpolate
             label start = mesh().boundaryMesh()[patchID].start();
             label localFaceID = faceID - start;
 
-            const labelUList& faceCells =
+            const unallocLabelList& faceCells =
                 mesh().boundary()[patchID].faceCells();
 
             const cyclicFvPatch& cycPatch =
@@ -620,7 +623,78 @@ void newLeastSquaresVolPointInterpolation::interpolate
           + coeffs[2]*dr.z();
     }
 
-    pf.correctBoundaryConditions();
+    // ZT: Correct only fixedValue patches
+    // (for example, processor patches should already be sinchronized)
+    // pf.correctBoundaryConditions();
+    forAll(pf.boundaryField(), patchI)
+    {
+        if
+        (
+            isA
+            <
+#ifdef OPENFOAMESIORFOUNDATION
+                fixedValuePointPatchField<Type>
+#else
+                FixedValuePointPatchField
+                <
+                    pointPatchField,
+                    pointMesh,
+                    pointPatch,
+                    DummyMatrix,
+                    Type
+                >
+#endif
+            >
+            (
+                pf.boundaryField()[patchI]
+            )
+        )
+        {
+            pf.boundaryField()[patchI].initEvaluate();
+        }
+    }
+    forAll(pf.boundaryField(), patchI)
+    {
+        if
+        (
+            isA
+            <
+#ifdef OPENFOAMESIORFOUNDATION
+                fixedValuePointPatchField<Type>
+#else
+                FixedValuePointPatchField
+                <
+                    pointPatchField,
+                    pointMesh,
+                    pointPatch,
+                    DummyMatrix,
+                    Type
+                >
+#endif
+            >
+            (
+                pf.boundaryField()[patchI]
+            )
+        )
+        {
+            pf.boundaryField()[patchI].evaluate();
+        }
+    }
+
+    // forAll(pf.boundaryField(), patchI)
+    // {
+    //     if (!pf.boundaryField()[patchI].coupled())
+    //     {
+    //         pf.boundaryField()[patchI].initEvaluate();
+    //     }
+    // }
+    // forAll(pf.boundaryField(), patchI)
+    // {
+    //     if (!pf.boundaryField()[patchI].coupled())
+    //     {
+    //         pf.boundaryField()[patchI].evaluate();
+    //     }
+    // }
 
     // Correct axis point values
     forAll(mesh().boundaryMesh(), patchI)
@@ -866,7 +940,7 @@ tmp<Field<Type> > newLeastSquaresVolPointInterpolation::interpolate
             label start = mesh().boundaryMesh()[patchID].start();
             label localFaceID = faceID - start;
 
-            const labelUList& faceCells =
+            const unallocLabelList& faceCells =
                 mesh().boundary()[patchID].faceCells();
 
             label sizeby2 = faceCells.size()/2;
@@ -1364,7 +1438,7 @@ Type newLeastSquaresVolPointInterpolation::interpolate
             label start = mesh().boundaryMesh()[patchID].start();
             label localFaceID = faceID - start;
 
-            const labelUList& faceCells =
+            const unallocLabelList& faceCells =
                 mesh().boundary()[patchID].faceCells();
 
             label sizeby2 = faceCells.size()/2;

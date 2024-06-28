@@ -64,5 +64,17 @@
     <ClCompile Include="solidModels\unsNonLinGeomUpdatedLagSolid.C" />
     <ClCompile Include="solidModels\vertexCentredLinGeomSolid.C" />
     <ClCompile Include="solidModels\weakThermalLinGeomSolid.C" />
+    <ClCompile Include="solidModels\kirchhoffPlateSolid.C" />
+    <ClCompile Include="solidModels\thermalSolid.C" />
+    <ClCompile Include="solidModels\vertexCentredNonLinGeomTotalLagSolid.C" />
+    <ClCompile Include="solidModels\normalDisplacementPointPatchVectorField.C" />
+    <ClCompile Include="solidModels\fixedRotationPointPatchVectorField.C" />
+    <ClCompile Include="solidModels\linearSpatialDisplacementPointPatchVectorField.C" />
+    <ClCompile Include="solidModels\solidContactPointPatchVectorField.C" />
+    <ClCompile Include="solidModels\solidContactPointPatchVectorFieldCalcContact.C" />
+    <ClCompile Include="solidModels\solidForcePointPatchVectorField.C" />
+    <ClCompile Include="solidModels\pointNormalContactModel.C" />
+    <ClCompile Include="solidModels\newPointNormalContactModel.C" />
+    <ClCompile Include="solidModels\pointStandardPenalty.C" />
   </ItemGroup>
 </Project>

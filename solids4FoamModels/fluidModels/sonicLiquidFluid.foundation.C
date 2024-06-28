@@ -295,7 +295,7 @@ tmp<vectorField> sonicLiquidFluid::patchViscousForce
 {
     tmp<vectorField> tvF
     (
-        new vectorField(mesh().boundary()[patchID].size(), vector::zero)
+        new vectorField(mesh().boundary()[patchID].size(), vector::zero_)
     );
 
     tvF.ref() = mu_.value()*U().boundaryField()[patchID].snGrad();

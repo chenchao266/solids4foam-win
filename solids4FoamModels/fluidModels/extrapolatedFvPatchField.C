@@ -28,6 +28,7 @@ License
 #include "dictionary.H"
 #include "emptyPolyPatch.H"
 #include "cyclicPolyPatch.H"
+#include "processorPolyPatch.H"
 #include "scalarMatrices.H"
 #include "volFields.H"
 #include "skewCorrectionVectors.H"
@@ -168,9 +169,9 @@ void extrapolatedFvPatchField<Type>::updateCoeffs()
     const labelList& neighbour = mesh.neighbour();
     const labelList& patchCells = this->patch().faceCells();
 #else
-    const labelUList& owner = mesh.owner();
-    const labelUList& neighbour = mesh.neighbour();
-    const labelUList& patchCells = this->patch().faceCells();
+    const unallocLabelList& owner = mesh.owner();
+    const unallocLabelList& neighbour = mesh.neighbour();
+    const unallocLabelList& patchCells = this->patch().faceCells();
 #endif
 
     const surfaceScalarField& weights = mesh.weights();
@@ -226,7 +227,7 @@ void extrapolatedFvPatchField<Type>::updateCoeffs()
                     const labelList& cycPatchCells =
                         mesh.boundaryMesh()[patchID].faceCells();
 #else
-                    const labelUList& cycPatchCells =
+                    const unallocLabelList& cycPatchCells =
                         mesh.boundaryMesh()[patchID].faceCells();
 #endif
                     label sizeby2 = cycPatchCells.size()/2;
@@ -281,7 +282,7 @@ void extrapolatedFvPatchField<Type>::updateCoeffs()
                     const labelList& procPatchCells =
                         mesh.boundaryMesh()[patchID].faceCells();
 #else
-                    const labelUList& procPatchCells =
+                    const unallocLabelList& procPatchCells =
                         mesh.boundaryMesh()[patchID].faceCells();
 #endif
 
@@ -334,9 +335,9 @@ void extrapolatedFvPatchField<Type>::evaluate(const Pstream::commsTypes)
     const labelList& neighbour = mesh.neighbour();
     const labelList& patchCells = this->patch().faceCells();
 #else
-    const labelUList& owner = mesh.owner();
-    const labelUList& neighbour = mesh.neighbour();
-    const labelUList& patchCells = this->patch().faceCells();
+    const unallocLabelList& owner = mesh.owner();
+    const unallocLabelList& neighbour = mesh.neighbour();
+    const unallocLabelList& patchCells = this->patch().faceCells();
 #endif
 
     const surfaceScalarField& weights = mesh.weights();
@@ -423,7 +424,7 @@ void extrapolatedFvPatchField<Type>::evaluate(const Pstream::commsTypes)
                     const labelList& cycPatchCells =
                         mesh.boundaryMesh()[patchID].faceCells();
 #else
-                    const labelUList& cycPatchCells =
+                    const unallocLabelList& cycPatchCells =
                         mesh.boundaryMesh()[patchID].faceCells();
 #endif
 
@@ -499,7 +500,7 @@ void extrapolatedFvPatchField<Type>::evaluate(const Pstream::commsTypes)
                     const labelList& procPatchCells =
                         mesh.boundaryMesh()[patchID].faceCells();
 #else
-                    const labelUList& procPatchCells =
+                    const unallocLabelList& procPatchCells =
                         mesh.boundaryMesh()[patchID].faceCells();
 #endif
 

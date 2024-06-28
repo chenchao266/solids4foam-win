@@ -32,6 +32,18 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+#ifdef OPENFOAMESI
+const Foam::Enum
+<
+    Foam::nonLinearGeometry::nonLinearType
+>
+Foam::nonLinearGeometry::nonLinearNames_
+({
+    {Foam::nonLinearGeometry::nonLinearType::LINEAR_GEOMETRY, "linearGeometry"},
+    {Foam::nonLinearGeometry::nonLinearType::UPDATED_LAGRANGIAN, "updatedLagrangian"},
+    {Foam::nonLinearGeometry::nonLinearType::TOTAL_LAGRANGIAN, "totalLagrangian"},
+});
+#else
 template<>
 const char*
 Foam::NamedEnum<Foam::nonLinearGeometry::nonLinearType, 3>::names[] =
@@ -43,7 +55,7 @@ Foam::NamedEnum<Foam::nonLinearGeometry::nonLinearType, 3>::names[] =
 
 const Foam::NamedEnum<Foam::nonLinearGeometry::nonLinearType, 3>
 Foam::nonLinearGeometry::nonLinearNames_;
-
+#endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

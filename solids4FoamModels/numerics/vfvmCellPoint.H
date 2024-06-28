@@ -47,6 +47,10 @@ Author
 #include "volFields.H"
 #include "pointFields.H"
 #include "sparseMatrix.H"
+#include "scalarMatrices.H"
+#include "RectangularMatrix.H"
+#include "cellPointLeastSquaresVectors.H"
+#include "SparseMatrixTemplate.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -65,7 +69,27 @@ namespace vfvm
         const fvMesh& dualMesh,
         const labelList& dualFaceToCell,
         const labelList& dualCellToPoint,
-        const Field<symmTensor4thOrder>& materialTangentField,
+        const Field<scalarSquareMatrix>& materialTangentField,
+        const scalar zeta,
+        const bool debug = false
+    );
+
+    // Add coefficients to the matrix for the divergence of stress
+    // for a finite strain displacement formulation. Each coefficient in the
+    // matrix is a 3x3 matrix.
+    // Note: this function does not calculate contributions to the right-hand
+    // side
+    void divSigma
+    (
+        sparseMatrix& matrix,
+        const fvMesh& mesh,
+        const fvMesh& dualMesh,
+        const labelList& dualFaceToCell,
+        const labelList& dualCellToPoint,
+        const Field<scalarSquareMatrix>& materialTangentField,
+        const Field<RectangularMatrix<scalar>>& geometricStiffnessField,
+        const symmTensorField& sigma,
+        const tensorField& dualGradDField,
         const boolList& fixedDofs,
         const symmTensorField& fixedDofDirections,
         const scalar fixedDofScale,
@@ -73,6 +97,19 @@ namespace vfvm
         const bool debug = false
     );
 
+    // Add coefficients to the matrix for the Laplacian of a scalar field with
+    // a scalar diffusivity field
+    void laplacian
+    (
+        sparseScalarMatrix& matrix,
+        const Switch compactStencil,
+        const fvMesh& mesh,
+        const fvMesh& dualMesh,
+        const labelList& dualFaceToCell,
+        const labelList& dualCellToPoint,
+        const scalarField& diffusivity, // diffusivity in the primary cells
+        const bool debug = false
+    );
 
     // Add coefficients to the matrix for the second time derivative
     // Note: this function does not calculate contributions to the right-hand
@@ -92,11 +129,6 @@ namespace vfvm
 
 } // End namespace Foam
 
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#ifdef NoRepository
-#   include "vfvmCellPoint.C"
-#endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

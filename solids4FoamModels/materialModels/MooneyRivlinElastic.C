@@ -96,23 +96,23 @@ Foam::MooneyRivlinElastic::MooneyRivlinElastic
 {
     // Compute material properties
     // Shear modulus: based on pure shear stress state for hyperelasticity
-    mu() = 2.0*(c10_ + c01_);
+    this->mu(2.0*(c10_ + c01_));
 
     // Bulk modulus
     // The user can specify K directly or the Poisson's ratio, nu
     if (dict.found("K"))
     {
-        K() = dimensionedScalar(dict.lookup("K"));
+        this->K(dimensionedScalar(dict.lookup("K")));
     }
     else if (dict.found("nu") && !dict.found("K"))
     {
         const dimensionedScalar nu = dimensionedScalar(dict.lookup("nu"));
-        
+
         // Young's modulus
         const volScalarField E(6.0*(c10_ + c01_));
 
         // Compute K based on linear elasticity
-        K() = E/(3.0*(1.0 - 2.0*nu));
+        this->K(E/(3.0*(1.0 - 2.0*nu)));
     }
     else
     {
@@ -131,8 +131,8 @@ Foam::MooneyRivlinElastic::MooneyRivlinElastic
         << "    max(K) = "   << gMax(mag(K())())   << endl;
 
     // Update surface fields
-    muf() = fvc::interpolate(mu());
-    Kf()  = fvc::interpolate(K());
+    this->muf(fvc::interpolate(mu()));
+    this->Kf(fvc::interpolate(K()));
 }
 
 

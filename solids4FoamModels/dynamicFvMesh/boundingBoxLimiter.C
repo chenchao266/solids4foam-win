@@ -25,6 +25,7 @@ License
 
 #include "boundingBoxLimiter.H"
 #include "addToRunTimeSelectionTable.H"
+#include "demandDrivenData.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
@@ -127,8 +128,8 @@ void Foam::boundingBoxLimiter::calcFacesAllowedToBreak() const
     );
 
     scalarField& crackLimiterBoxesI = crackLimiterBoxes.internalField();
-    const labelUList& owner = mesh.owner();
-    const labelUList& neighbour = mesh.neighbour();
+    const unallocLabelList& owner = mesh.owner();
+    const unallocLabelList& neighbour = mesh.neighbour();
 
     forAll(facesAllowedToBreakI, faceI)
     {

@@ -1,5 +1,5 @@
 # solids4foam-win
-solids4foam-2.0 src  
+solids4foam-2.1 src  
 vs 2022  
 
 -   abaqusUMATs.vcxproj

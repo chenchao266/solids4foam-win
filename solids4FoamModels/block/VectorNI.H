@@ -38,16 +38,16 @@ const char* const VectorN<Cmpt, length>::typeName =
     ("vector" + name(length)).c_str();
 
 template <class Cmpt, int length>
-const VectorN<Cmpt, length> VectorN<Cmpt, length>::zero(0);
+const VectorN<Cmpt, length> VectorN<Cmpt, length>::zero_(0);
 
 template <class Cmpt, int length>
-const VectorN<Cmpt, length> VectorN<Cmpt, length>::one(1);
+const VectorN<Cmpt, length> VectorN<Cmpt, length>::one_(1);
 
 template <class Cmpt, int length>
-const VectorN<Cmpt, length> VectorN<Cmpt, length>::max(VGREAT);
+const VectorN<Cmpt, length> VectorN<Cmpt, length>::max_(VGREAT);
 
 template <class Cmpt, int length>
-const VectorN<Cmpt, length> VectorN<Cmpt, length>::min(-VGREAT);
+const VectorN<Cmpt, length> VectorN<Cmpt, length>::min_(-VGREAT);
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //

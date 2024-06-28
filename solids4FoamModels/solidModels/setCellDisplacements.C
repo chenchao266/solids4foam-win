@@ -99,7 +99,7 @@ void Foam::setCellDisplacements::readDict()
 
         // Find the closest cell globally
         const scalar minDist = returnReduce(dist, minOp<scalar>());
-        label procID = int(GREAT);
+        label procID = Pstream::nProcs();
         if (mag(minDist - dist) > SMALL)
         {
             // -1 signifies that the current proc does not have the closest
@@ -169,8 +169,11 @@ void Foam::setCellDisplacements::readDict()
         timeVaryingDisps_ = newTimeVaryingDisps;
         currentCellDisps_ = newCurrentCellDisps;
 
-        Pout<< type() << ": proc " << Pstream::myProcNo() << " has "
-            << cellIDs_.size() << " cells with setDisplacements" << endl;
+        if (cellIDs_.size() > 0)
+        {
+            Pout<< type() << ": proc " << Pstream::myProcNo() << " has "
+                << cellIDs_.size() << " cells with setDisplacements" << endl;
+        }
     }
 }
 

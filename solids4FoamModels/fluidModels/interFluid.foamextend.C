@@ -164,7 +164,7 @@ tmp<vectorField> interFluid::patchViscousForce(const label patchID) const
 {
     tmp<vectorField> tvF
     (
-        new vectorField(mesh().boundary()[patchID].size(), vector::zero)
+        new vectorField(mesh().boundary()[patchID].size(), vector::zero_)
     );
 
     tvF() =

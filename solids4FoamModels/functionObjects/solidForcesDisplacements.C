@@ -175,9 +175,8 @@ Foam::solidForcesDisplacements::solidForcesDisplacements
     }
     else
     {
-        FatalErrorIn(this->name() + " function object constructor")
-            << "historyPatch not specified."
-            << abort(FatalError);
+        WarningIn(this->name() + " function object constructor")
+            << "historyPatch not specified." << endl;
     }
 
     // Lookup the solid mesh
@@ -281,7 +280,7 @@ bool Foam::solidForcesDisplacements::read(const dictionary& dict)
 #ifdef OPENFOAMESIORFOUNDATION
 bool Foam::solidForcesDisplacements::write()
 {
-    return writeData();
+    return false;
 }
 #endif
 

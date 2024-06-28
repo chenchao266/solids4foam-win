@@ -80,7 +80,7 @@ class fluidModel
         autoPtr<dynamicFvMesh> meshPtr_;
 
         //- Fluid properties dictionary
-        dictionary fluidProperties_;
+        dictionary& fluidProperties_;
 
         //- Piso control
         mutable autoPtr<pisoControl> pisoPtr_;
@@ -195,6 +195,12 @@ class fluidModel
 protected:
 
     // Protected member functions
+
+        //- Return fluid properties dictionary
+        dictionary& fluidProperties()
+        {
+            return fluidProperties_;
+        }
 
         //- Return fluid properties dictionary
         const dictionary& fluidProperties() const
@@ -456,6 +462,30 @@ public:
                 const label patchID
             ) const = 0;
 
+            //- Patch temperature
+            virtual tmp<scalarField> patchTemperature(const label patchID) const
+            {
+                NotImplemented;
+                return tmp<scalarField>(new scalarField());
+            }
+
+            //- Patch heat flux (W/m2)
+            virtual tmp<scalarField> patchHeatFlux(const label patchID) const
+            {
+                NotImplemented;
+                return tmp<scalarField>(new scalarField());
+            }
+
+            //- Patch heat transfer coefficient
+            virtual tmp<scalarField> patchHeatTransferCoeff
+            (
+                const label patchID
+            ) const
+            {
+                NotImplemented;
+                return tmp<scalarField>(new scalarField());
+            }
+
             //- Face zone viscous force (N/m2)
             virtual tmp<vectorField> faceZoneViscousForce
             (
@@ -464,6 +494,24 @@ public:
 
             //- Face zone pressure force (N/m2)
             virtual tmp<scalarField> faceZonePressureForce
+            (
+                const label interfaceI
+            ) const;
+
+            //- Face zone temperature
+            virtual tmp<scalarField> faceZoneTemperature
+            (
+                const label interfaceI
+            ) const;
+
+            //- Face zone heat flux (W/m2)
+            virtual tmp<scalarField> faceZoneHeatFlux
+            (
+                const label interfaceI
+            ) const;
+
+            //- Face zone heat transfer coefficient
+            virtual tmp<scalarField> faceZoneHeatTransferCoeff
             (
                 const label interfaceI
             ) const;
@@ -485,6 +533,29 @@ public:
 
         // Edit
 
+            //- Set temperature and heat flux at specified patch
+            virtual void setTemperatureAndHeatFlux
+            (
+                const label interfaceI,
+                const label patchID,
+                const scalarField& faceZoneTemperature,
+                const scalarField& faceZoneHeatFlux
+            )
+            {
+                NotImplemented;
+            }
+
+            //- Set equivalent heat transfer coeff at specified patch
+            virtual void setEqInterHeatTransferCoeff
+            (
+                const label interfaceI,
+                const label patchID,
+                const scalarField& faceZoneHeatTransferCoeff
+            )
+            {
+                NotImplemented;
+            }
+
             //- Update the size of the time-step
             virtual void setDeltaT(Time& runTime);
 
@@ -496,6 +567,9 @@ public:
 
             //- Write fields
             virtual void writeFields(const Time& runTime);
+
+            //- This function is called at the end of the simulation
+            virtual void end();
 };
 
 

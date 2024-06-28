@@ -25,8 +25,10 @@ License
 
 #include "solidSubMeshes.H"
 #include "twoDPointCorrector.H"
+#include "processorPolyPatch.H"
 #include "wedgePolyPatch.H"
 #include "ZoneIDs.H"
+#include "demandDrivenData.H"
 
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
@@ -140,7 +142,7 @@ void Foam::solidSubMeshes::makeSubMeshVolToPoint() const
         (
             matI,
 #ifdef OPENFOAMESIORFOUNDATION
-            new volPointInterpolation
+            new enhancedVolPointInterpolation
 #else
             new newLeastSquaresVolPointInterpolation
 #endif
@@ -232,23 +234,9 @@ void Foam::solidSubMeshes::calcSubMeshSigma() const
         subMeshSigma_.set
         (
             matI,
-            new volSymmTensorField
+            lookupBaseMeshVolField<symmTensor>
             (
-                IOobject
-                (
-                    "sigma",
-                    subMeshes[matI].subMesh().time().timeName(),
-                    subMeshes[matI].subMesh(),
-                    IOobject::NO_READ,
-                    IOobject::NO_WRITE
-                ),
-                subMeshes[matI].subMesh(),
-                dimensionedSymmTensor
-                (
-                    "zero",
-                    dimForce/dimArea,
-                    symmTensor::zero_
-                )
+                "sigma", subMeshes[matI].subMesh()
             )
         );
     }
@@ -280,23 +268,9 @@ void Foam::solidSubMeshes::calcSubMeshSigmaf() const
         subMeshSigmaf_.set
         (
             matI,
-            new surfaceSymmTensorField
+            lookupBaseMeshSurfaceField<symmTensor>
             (
-                IOobject
-                (
-                    "sigmaf",
-                    subMeshes[matI].subMesh().time().timeName(),
-                    subMeshes[matI].subMesh(),
-                    IOobject::NO_READ,
-                    IOobject::NO_WRITE
-                ),
-                subMeshes[matI].subMesh(),
-                dimensionedSymmTensor
-                (
-                    "zero",
-                    dimForce/dimArea,
-                    symmTensor::zero_
-                )
+                "sigmaf", subMeshes[matI].subMesh()
             )
         );
     }
@@ -1425,7 +1399,7 @@ Foam::PtrList<Foam::newFvMeshSubset>& Foam::solidSubMeshes::subMeshes()
 }
 
 #ifdef OPENFOAMESIORFOUNDATION
-    const Foam::PtrList<Foam::volPointInterpolation>&
+    const Foam::PtrList<Foam::enhancedVolPointInterpolation>&
 #else
     const Foam::PtrList<Foam::newLeastSquaresVolPointInterpolation>&
 #endif
@@ -2183,8 +2157,18 @@ void Foam::solidSubMeshes::moveSubMeshes()
 #else
             subMeshes()[matI].subMesh().changing(false);
 #endif
+#if (OPENFOAM >= 2206)
+            {
+                auto tmeshPhi(subMeshes()[matI].subMesh().setPhi());
+                if (tmeshPhi)
+                {
+                    tmeshPhi.ref().writeOpt(IOobject::NO_WRITE);
+                }
+            }
+#else
             subMeshes()[matI].subMesh().setPhi().writeOpt() =
                 IOobject::NO_WRITE;
+#endif
 
             if (baseMesh().time().outputTime() && writeSubMeshes_)
             {

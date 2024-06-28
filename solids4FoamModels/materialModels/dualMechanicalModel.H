@@ -137,8 +137,16 @@ public:
             //- Return const access to the mesh
             const fvMesh& mesh() const;
 
+#ifdef OPENFOAMESIORFOUNDATION
             //- Material tangent field defined at dual mesh faces
-            tmp< Field<symmTensor4thOrder> > materialTangentFaceField() const;
+            tmp<Field<scalarSquareMatrix>> materialTangentFaceField() const;
+#endif
+
+            //- Implicit modulus field at the faces
+            tmp<surfaceScalarField> impKf() const;
+
+            //- Bulk modulus field at the faces
+            tmp<surfaceScalarField> bulkModulus() const;
 
         // Edit
 

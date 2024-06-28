@@ -414,15 +414,12 @@ Foam::uniformDimensionedVectorField Foam::fluidModel::readG() const
 #endif
     {
         Info<< "Reading g from constant directory" << endl;
-#ifdef OPENFOAMESI
-    #if OPENFOAMESI > 1812
+#if (OPENFOAM >= 1906)
         return meshObjects::gravity(runTime());
-    #else
+#elif (OPENFOAM >= 1812)
         return meshObjects::gravity
         (
-            runTime()
-#if OPENFOAM < 1912
-	    ,
+            runTime(),
             IOobject
             (
                 "g",
@@ -431,9 +428,7 @@ Foam::uniformDimensionedVectorField Foam::fluidModel::readG() const
                 IOobject::MUST_READ,
                 IOobject::NO_WRITE
             )
-#endif
         );
-    #endif
 #else
         return uniformDimensionedVectorField
         (
@@ -452,15 +447,12 @@ Foam::uniformDimensionedVectorField Foam::fluidModel::readG() const
     {
         Info<< "g field not found in constant directory: initialising to zero"
             << endl;
-#ifdef OPENFOAMESI
-    #if OPENFOAMESI > 1812
+#if (OPENFOAM >= 1906)
         return meshObjects::gravity(runTime());
-    #else
+#elif (OPENFOAM >= 1812)
         return meshObjects::gravity
         (
-            runTime()
-#if OPENFOAM < 1912
-	    ,
+            runTime(),
             IOobject
             (
                 "g",
@@ -469,9 +461,7 @@ Foam::uniformDimensionedVectorField Foam::fluidModel::readG() const
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
             )
-#endif
         );
-    #endif
 #else
         return uniformDimensionedVectorField
         (
@@ -503,15 +493,23 @@ Foam::fluidModel::fluidModel
     physicsModel(type, runTime),
     IOdictionary
     (
-        IOobject
+        // If region == "region0" then read from the main case
+        // Otherwise, read from the region/sub-mesh directory e.g.
+        // constant/fluid or constant/solid
+        bool(region == dynamicFvMesh::defaultRegion)
+      ? IOobject
         (
             "fluidProperties",
-            // If region == "region0" then read from the main case
-            // Otherwise, read from the region/sub-mesh directory e.g.
-            // constant/fluid or constant/solid
-            bool(region == dynamicFvMesh::defaultRegion)
-          ? fileName(runTime.caseConstant())
-          : fileName(runTime.caseConstant()/region),
+            runTime.caseConstant(),
+            runTime,
+            IOobject::MUST_READ,
+            IOobject::NO_WRITE
+        )
+      : IOobject
+        (
+            "fluidProperties",
+            runTime.caseConstant(),
+            region, // using 'local' property of IOobject
             runTime,
             IOobject::MUST_READ,
             IOobject::NO_WRITE
@@ -762,6 +760,48 @@ Foam::tmp<Foam::scalarField> Foam::fluidModel::faceZonePressureForce
 }
 
 
+Foam::tmp<Foam::scalarField> Foam::fluidModel::faceZoneTemperature
+(
+    const label interfaceI
+) const
+{
+    const scalarField patchT
+    (
+        patchTemperature(globalPatches()[interfaceI].patch().index())
+    );
+
+    return globalPatches()[interfaceI].patchFaceToGlobal(patchT);
+}
+
+
+Foam::tmp<Foam::scalarField> Foam::fluidModel::faceZoneHeatFlux
+(
+    const label interfaceI
+) const
+{
+    const scalarField patchHF
+    (
+        patchHeatFlux(globalPatches()[interfaceI].patch().index())
+    );
+
+    return globalPatches()[interfaceI].patchFaceToGlobal(patchHF);
+}
+
+
+Foam::tmp<Foam::scalarField> Foam::fluidModel::faceZoneHeatTransferCoeff
+(
+    const label interfaceI
+) const
+{
+    const scalarField patchHTC
+    (
+        patchHeatTransferCoeff(globalPatches()[interfaceI].patch().index())
+    );
+
+    return globalPatches()[interfaceI].patchFaceToGlobal(patchHTC);
+}
+
+
 void Foam::fluidModel::UisRequired()
 {
 #ifdef OPENFOAMESIORFOUNDATION
@@ -790,7 +830,6 @@ void Foam::fluidModel::pisRequired()
             << abort(FatalError);
     }
 }
-
 
 void Foam::fluidModel::makeGlobalPatches(const wordList& patchNames) const
 {
@@ -877,48 +916,61 @@ Foam::autoPtr<Foam::fluidModel> Foam::fluidModel::New
     const word& region
 )
 {
-    word fluidModelTypeName;
+    // NB: dictionary must be unregistered to avoid adding to the database
 
-    // Enclose the creation of the dictionary to ensure it is
-    // deleted before the fluid is created otherwise the dictionary
-    // is entered in the database twice
-    {
-        IOdictionary fluidProperties
+    IOdictionary props
+    (
+        IOobject
         (
-            IOobject
-            (
-                "fluidProperties",
-                 bool(region == dynamicFvMesh::defaultRegion)
-              ? fileName(runTime.caseConstant())
-              : fileName(runTime.caseConstant()/region),
-                runTime,
-                IOobject::MUST_READ,
-                IOobject::NO_WRITE
-            )
-        );
+            "fluidProperties",
+            bool(region == dynamicFvMesh::defaultRegion)
+          ? fileName(runTime.caseConstant())
+          : fileName(runTime.caseConstant()/region),
+            runTime,
+            IOobject::MUST_READ,
+            IOobject::NO_WRITE,
+            false  // Do not register
+        )
+    );
 
-        fluidProperties.lookup("fluidModel")
-            >> fluidModelTypeName;
+    const word modelType(props.lookup("fluidModel"));
+
+    Info<< nl << "Selecting fluidModel " << modelType << endl;
+
+#if (OPENFOAM >= 2112)
+    auto* ctorPtr = dictionaryConstructorTable(modelType);
+
+    if (!ctorPtr)
+    {
+        FatalIOErrorInLookup
+        (
+            props,
+            "fluidModel",
+            modelType,
+            *dictionaryConstructorTablePtr_
+        ) << exit(FatalIOError);
     }
 
-    Info<< nl << "Selecting fluidModel " << fluidModelTypeName << endl;
-
+#else
     dictionaryConstructorTableType::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(fluidModelTypeName);
+        dictionaryConstructorTablePtr_->find(modelType);
 
     if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorIn
         (
             "fluidModel::New(Time&, const word&)"
-        )   << "Unknown fluidModel type " << fluidModelTypeName
+        )   << "Unknown fluidModel type " << modelType
             << endl << endl
             << "Valid fluidModel types are :" << endl
             << dictionaryConstructorTablePtr_->toc()
             << exit(FatalError);
     }
 
-    return autoPtr<fluidModel>(cstrIter()(runTime, region));
+    auto* ctorPtr = cstrIter();
+#endif
+
+    return autoPtr<fluidModel>(ctorPtr(runTime, region));
 }
 
 
@@ -942,5 +994,9 @@ bool Foam::fluidModel::read()
     }
 }
 
-
+void Foam::fluidModel::end()
+{
+    this->IOobject::rename(this->IOobject::name()+".withDefaultValues");
+    this->regIOobject::write();
+}
 // ************************************************************************* //

@@ -36,7 +36,7 @@ License
 
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 #if 0
-void Foam::fsiInterfaceSolidFvPatchVectorField::updateForce()
+Foam::fsiInterfaceSolidFvPatchVectorField::updateForce()
 {
     // Check if coupling switch needs to be updated
     if (!coupled_)

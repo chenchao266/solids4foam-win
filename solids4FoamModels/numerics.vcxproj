@@ -19,15 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="numerics\advancingFrontAMIS4F.C" />
+    <ClCompile Include="numerics\advancingFrontAMIS4FParallelOps.C" />
+    <ClCompile Include="numerics\AMIInterpolationS4F.C" />
+    <ClCompile Include="numerics\AMIInterpolationS4FNew.C" />
     <ClCompile Include="numerics\amiZoneInterpolation.C" />
     <ClCompile Include="numerics\backwardD2dt2Schemes.C" />
     <ClCompile Include="numerics\cellPointLeastSquaresVectors.C" />
     <ClCompile Include="numerics\csvTableReaders.C" />
+    <ClCompile Include="numerics\deltaVectors.C" />
     <ClCompile Include="numerics\eig3.C" />
     <ClCompile Include="numerics\eig3Field.C" />
     <ClCompile Include="numerics\expVolFields.C" />
     <ClCompile Include="numerics\extendedLeastSquaresGrads.C" />
     <ClCompile Include="numerics\extendedLeastSquaresVectors.C" />
+    <ClCompile Include="numerics\faceAreaWeightAMIS4F.C" />
     <ClCompile Include="numerics\fvcCellLimitedGrad.C" />
     <ClCompile Include="numerics\fvcInterpolate.C" />
     <ClCompile Include="numerics\globalPointIndices.C" />
@@ -35,7 +41,10 @@
     <ClCompile Include="numerics\logVolFields.C" />
     <ClCompile Include="numerics\mechanicalEnergies.C" />
     <ClCompile Include="numerics\meshDualiser.C" />
+    <ClCompile Include="numerics\minEdgeLength.C" />
     <ClCompile Include="numerics\multiplyCoeff.C" />
+    <ClCompile Include="numerics\multiplyCoeffExtended.C" />
+    <ClCompile Include="numerics\multiplyCoeffRectMat.C" />
     <ClCompile Include="numerics\newAMIInterpolationName.C" />
     <ClCompile Include="numerics\newAMIMethod.C" />
     <ClCompile Include="numerics\newAMIMethodNew.C" />
@@ -44,11 +53,17 @@
     <ClCompile Include="numerics\newFvMeshSubset.C" />
     <ClCompile Include="numerics\newGGIInterpolationName.C" />
     <ClCompile Include="numerics\openFoamTableReaders.C" />
+    <ClCompile Include="numerics\patchCorrectionVectors.C" />
+    <ClCompile Include="numerics\pointFieldFunctions.C" />
+    <ClCompile Include="numerics\pointPointLeastSquaresVectors.C" />
     <ClCompile Include="numerics\realEigenValues.C" />
     <ClCompile Include="numerics\RodriguesRotation.C" />
     <ClCompile Include="numerics\sparseMatrix.C" />
+    <ClCompile Include="numerics\SparseMatrixTemplates.C" />
     <ClCompile Include="numerics\sparseMatrixTools.C" />
     <ClCompile Include="numerics\tableReaders.C" />
+    <ClCompile Include="numerics\vfvcCellPoint.C" />
+    <ClCompile Include="numerics\vfvmCellPoint.C" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -137,7 +152,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>.;..\..\OpenFOAM-win\OpenFOAM\algorithms;..\..\OpenFOAM-win\OpenFOAM\containers;..\..\OpenFOAM-win\OpenFOAM\db;..\..\OpenFOAM-win\OpenFOAM\dimensionedTypes;..\..\OpenFOAM-win\OpenFOAM\dimensionSet;..\..\OpenFOAM-win\OpenFOAM\fields;..\..\OpenFOAM-win\OpenFOAM\global;..\..\OpenFOAM-win\OpenFOAM\graph;..\..\OpenFOAM-win\OpenFOAM\include;..\..\OpenFOAM-win\OpenFOAM\interpolations;..\..\OpenFOAM-win\OpenFOAM\matrices;..\..\OpenFOAM-win\OpenFOAM\memory;..\..\OpenFOAM-win\OpenFOAM\meshes;..\..\OpenFOAM-win\OpenFOAM\primitives;..\..\OpenFOAM-win\OSspecific;..\..\OpenFOAM-win\finiteVolume;..\..\OpenFOAM-win\meshTools;..\..\OpenFOAM-win\dynamicMesh;..\..\OpenFOAM-win\fileFormats;..\..\OpenFOAM-win\thermophysicalModels;..\..\OpenFOAM-win\transportModels;..\..\OpenFOAM-win\TurbulenceModels;..\..\OpenFOAM-win\topoChangerFvMesh;..\..\OpenFOAM-win\finiteArea;..\..\OpenFOAM-win\faOptions;..\..\OpenFOAM-win\dynamicFvMesh;..\..\OpenFOAM-win\dynamicFaMesh;..\..\OpenFOAM-win\phaseSystemModels\twoPhaseInter;.\solidModels;.\physicsModel;.\fluidSolidInterfaces;.\numerics;.\materialModels;.\fluidModels;.\octree\octree;.\block;.\ggi;.\controlSwitches;..\avalanche\gistools;..\..\eigen-3.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
-      <PreprocessorDefinitions>WM_LABEL_SIZE=64;WM_DP;NoRepository;WIN32;WIN64;_WINDOWS;NOMINMAX;_CRT_SECURE_NO_WARNINGS;OPENFOAMESIORFOUNDATION;OPENFOAMESI=2112;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WM_LABEL_SIZE=64;WM_DP;NoRepository;WIN32;WIN64;_WINDOWS;NOMINMAX;_CRT_SECURE_NO_WARNINGS;OPENFOAMESIORFOUNDATION;OPENFOAM_NOT_EXTEND;OPENFOAMESI=2112;OPENFOAM=2112;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

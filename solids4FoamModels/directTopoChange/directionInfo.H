@@ -56,7 +56,7 @@ SourceFiles
 
 #include "point.H"
 #include "labelList.H"
-#include "tensor.H"
+#include "tensor2.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

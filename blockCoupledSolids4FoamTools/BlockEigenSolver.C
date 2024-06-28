@@ -134,8 +134,8 @@ void Foam::BlockEigenSolver::convertFoamMatrixToEigenMatrix
     }
 
     // Matrix addressing
-    const labelUList& lowerAddr = matrix.mesh().lduAddr().lowerAddr();
-    const labelUList& upperAddr = matrix.mesh().lduAddr().upperAddr();
+    const unallocLabelList& lowerAddr = matrix.mesh().lduAddr().lowerAddr();
+    const unallocLabelList& upperAddr = matrix.mesh().lduAddr().upperAddr();
 
     // Grab matrix diagonal and off-diagonals
     const Field<tensor>& d = matrix.diag().asSquare();

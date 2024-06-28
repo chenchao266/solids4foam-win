@@ -29,17 +29,12 @@ License
 #include "volFields.H"
 #include "pointFields.H"
 #include "mathematicalConstants.H"
-#ifdef FOAMEXTEND
-    #include "tetMotionSolver.H"
-    #include "laplaceTetMotionSolver.H"
-    #include "tetPolyPatchInterpolation.H"
-    #include "fixedValueTetPolyPatchFields.H"
-#endif
-
+#include "tetMotionSolver.H"
+#include "laplaceTetMotionSolver.H"
+#include "fixedValueTetPolyPatchFields.H"
 #include "transformField.H"
 #include "fixedValuePointPatchFields.H"
-
-#include "mathematicalconstants.H"
+#include "tetPolyPatchInterpolation.H"
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -66,7 +61,8 @@ Foam::newDynamicBodyFvMesh::newDynamicBodyFvMesh(const IOobject& io)
                 io.time().constant(),
                 *this,
                 IOobject::MUST_READ,
-                IOobject::NO_WRITE
+                IOobject::NO_WRITE,
+                false  // Do not register
             )
         ).subDict(typeName + "Coeffs")
     ),

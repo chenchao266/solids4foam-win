@@ -84,7 +84,7 @@ void Foam::BlockLduMatrix<Type>::AmulCore
         {
             const scalarTypeField& activeUpper = Upper.asScalar();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 Ax[u[coeffI]] += mult(activeUpper[coeffI], x[l[coeffI]]);
             }
@@ -93,7 +93,7 @@ void Foam::BlockLduMatrix<Type>::AmulCore
         {
             const linearTypeField& activeUpper = Upper.asLinear();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 Ax[u[coeffI]] += mult(activeUpper[coeffI], x[l[coeffI]]);
             }
@@ -102,7 +102,7 @@ void Foam::BlockLduMatrix<Type>::AmulCore
         {
             const squareTypeField& activeUpper = Upper.asSquare();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 // Use transpose upper coefficient
                 Ax[u[coeffI]] +=
@@ -118,7 +118,7 @@ void Foam::BlockLduMatrix<Type>::AmulCore
         {
             const scalarTypeField& activeLower = Lower.asScalar();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 Ax[u[coeffI]] += mult(activeLower[coeffI], x[l[coeffI]]);
             }
@@ -127,7 +127,7 @@ void Foam::BlockLduMatrix<Type>::AmulCore
         {
             const linearTypeField& activeLower = Lower.asLinear();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 Ax[u[coeffI]] += mult(activeLower[coeffI], x[l[coeffI]]);
             }
@@ -136,7 +136,7 @@ void Foam::BlockLduMatrix<Type>::AmulCore
         {
             const squareTypeField& activeLower = Lower.asSquare();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 Ax[u[coeffI]] += mult(activeLower[coeffI], x[l[coeffI]]);
             }
@@ -150,7 +150,7 @@ void Foam::BlockLduMatrix<Type>::AmulCore
     {
         const scalarTypeField& activeUpper = Upper.asScalar();
 
-        for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+        for (label coeffI = 0; coeffI < u.size(); coeffI++)
         {
             Ax[l[coeffI]] += mult(activeUpper[coeffI], x[u[coeffI]]);
         }
@@ -159,7 +159,7 @@ void Foam::BlockLduMatrix<Type>::AmulCore
     {
         const linearTypeField& activeUpper = Upper.asLinear();
 
-        for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+        for (label coeffI = 0; coeffI < u.size(); coeffI++)
         {
             Ax[l[coeffI]] += mult(activeUpper[coeffI], x[u[coeffI]]);
         }
@@ -168,7 +168,7 @@ void Foam::BlockLduMatrix<Type>::AmulCore
     {
         const squareTypeField& activeUpper = Upper.asSquare();
 
-        for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+        for (label coeffI = 0; coeffI < u.size(); coeffI++)
         {
             Ax[l[coeffI]] += mult(activeUpper[coeffI], x[u[coeffI]]);
         }
@@ -215,6 +215,8 @@ void Foam::BlockLduMatrix<Type>::TmulCore
     const TypeCoeffField& Diag = this->diag();
     const TypeCoeffField& Upper = this->upper();
 
+    // Create multiplication function object
+    typename BlockCoeff<Type>::multiply mult;
     // Diagonal multiplication, no indirection
     multiply(Tx, Diag, x);
 
@@ -224,7 +226,7 @@ void Foam::BlockLduMatrix<Type>::TmulCore
     {
         const scalarTypeField& activeUpper = Upper.asScalar();
 
-        for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+        for (label coeffI = 0; coeffI < u.size(); coeffI++)
         {
             Tx[u[coeffI]] += mult(activeUpper[coeffI], x[l[coeffI]]);
         }
@@ -233,7 +235,7 @@ void Foam::BlockLduMatrix<Type>::TmulCore
     {
         const linearTypeField& activeUpper = Upper.asLinear();
 
-        for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+        for (label coeffI = 0; coeffI < u.size(); coeffI++)
         {
             Tx[u[coeffI]] += mult(activeUpper[coeffI], x[l[coeffI]]);
         }
@@ -242,7 +244,7 @@ void Foam::BlockLduMatrix<Type>::TmulCore
     {
         const squareTypeField& activeUpper = Upper.asSquare();
 
-        for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+        for (label coeffI = 0; coeffI < u.size(); coeffI++)
         {
             // Bug fix: Missing transpose. VV, 31/Aug/2015.
             Tx[u[coeffI]] += mult(activeUpper[coeffI].T(), x[l[coeffI]]);
@@ -257,7 +259,7 @@ void Foam::BlockLduMatrix<Type>::TmulCore
         {
             const scalarTypeField& activeUpper = Upper.asScalar();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 Tx[l[coeffI]] += mult(activeUpper[coeffI], x[u[coeffI]]);
             }
@@ -266,7 +268,7 @@ void Foam::BlockLduMatrix<Type>::TmulCore
         {
             const linearTypeField& activeUpper = Upper.asLinear();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 Tx[l[coeffI]] += mult(activeUpper[coeffI], x[u[coeffI]]);
             }
@@ -275,7 +277,7 @@ void Foam::BlockLduMatrix<Type>::TmulCore
         {
             const squareTypeField& activeUpper = Upper.asSquare();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 // Use transpose upper coefficient
                 Tx[l[coeffI]] +=
@@ -291,7 +293,7 @@ void Foam::BlockLduMatrix<Type>::TmulCore
         {
             const scalarTypeField& activeLower = Lower.asScalar();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 Tx[l[coeffI]] += mult(activeLower[coeffI], x[u[coeffI]]);
             }
@@ -300,7 +302,7 @@ void Foam::BlockLduMatrix<Type>::TmulCore
         {
             const linearTypeField& activeLower = Lower.asLinear();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 Tx[l[coeffI]] += mult(activeLower[coeffI], x[u[coeffI]]);
             }
@@ -309,7 +311,7 @@ void Foam::BlockLduMatrix<Type>::TmulCore
         {
             const squareTypeField& activeLower = Lower.asSquare();
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 // Bug fix: Missing transpose. VV, 31/Aug/2015.
                 Tx[l[coeffI]] += mult(activeLower[coeffI].T(), x[u[coeffI]]);
@@ -364,7 +366,7 @@ void Foam::BlockLduMatrix<Type>::segregateB
             linearType lt;
             squareType st;
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 contractLinear(lt, activeLower[coeffI]);
                 expandLinear(st, lt);
@@ -386,7 +388,7 @@ void Foam::BlockLduMatrix<Type>::segregateB
             linearType lt;
             squareType st;
 
-            for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+            for (label coeffI = 0; coeffI < u.size(); coeffI++)
             {
                 contractLinear(lt, activeUpper[coeffI]);
                 expandLinear(st, lt);
@@ -398,7 +400,7 @@ void Foam::BlockLduMatrix<Type>::segregateB
             // is also needed
             if (symmetric())
             {
-                for (register label coeffI = 0; coeffI < u.size(); coeffI++)
+                for (label coeffI = 0; coeffI < u.size(); coeffI++)
                 {
                     // Use transpose upper coefficient
                     contractLinear(lt, activeUpper[coeffI]);

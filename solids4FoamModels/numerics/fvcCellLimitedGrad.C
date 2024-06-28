@@ -162,8 +162,8 @@ tmp<volVectorField> cellLimitedGrad
 
     volVectorField& g = tGrad();
 
-    const labelUList& owner = mesh.owner();
-    const labelUList& neighbour = mesh.neighbour();
+    const unallocLabelList& owner = mesh.owner();
+    const unallocLabelList& neighbour = mesh.neighbour();
 
     const volVectorField& C = mesh.C();
     const surfaceVectorField& Cf = mesh.Cf();
@@ -193,7 +193,7 @@ tmp<volVectorField> cellLimitedGrad
     {
         const fvPatchScalarField& psf = bsf[patchi];
 
-        const labelUList& pOwner = mesh.boundary()[patchi].faceCells();
+        const unallocLabelList& pOwner = mesh.boundary()[patchi].faceCells();
 
         if (psf.coupled())
         {
@@ -264,7 +264,7 @@ tmp<volVectorField> cellLimitedGrad
 
     forAll(bsf, patchi)
     {
-        const labelUList& pOwner = mesh.boundary()[patchi].faceCells();
+        const unallocLabelList& pOwner = mesh.boundary()[patchi].faceCells();
         const vectorField& pCf = Cf.boundaryField()[patchi];
 
         forAll(pOwner, pFacei)
@@ -361,8 +361,8 @@ tmp<volTensorField> cellLimitedGrad
 
     volTensorField& g = tGrad();
 
-    const labelUList& owner = mesh.owner();
-    const labelUList& neighbour = mesh.neighbour();
+    const unallocLabelList& owner = mesh.owner();
+    const unallocLabelList& neighbour = mesh.neighbour();
 
     const volVectorField& C = mesh.C();
     const surfaceVectorField& Cf = mesh.Cf();
@@ -390,7 +390,7 @@ tmp<volTensorField> cellLimitedGrad
     forAll(bsf, patchi)
     {
         const fvPatchVectorField& psf = bsf[patchi];
-        const labelUList& pOwner = mesh.boundary()[patchi].faceCells();
+        const unallocLabelList& pOwner = mesh.boundary()[patchi].faceCells();
 
         if (psf.coupled())
         {
@@ -433,7 +433,7 @@ tmp<volTensorField> cellLimitedGrad
 
 
     // create limiter
-    vectorField limiter(vf.internalField().size(), vector::one);
+    vectorField limiter(vf.internalField().size(), vector::one_);
 
     forAll(owner, facei)
     {
@@ -461,7 +461,7 @@ tmp<volTensorField> cellLimitedGrad
 
     forAll(bsf, patchi)
     {
-        const labelUList& pOwner = mesh.boundary()[patchi].faceCells();
+        const unallocLabelList& pOwner = mesh.boundary()[patchi].faceCells();
         const vectorField& pCf = Cf.boundaryField()[patchi];
 
         forAll(pOwner, pFacei)
